@@ -8,6 +8,7 @@ import { LikeButton } from "@/components/LikeButton";
 import { Avatar } from "@/components/Avatar";
 import { CourseRequestButton } from "@/components/CourseRequestButton";
 import { CommentsSection } from "@/components/CommentsSection";
+import { ReviewsSection } from "@/components/ReviewsSection";
 
 export default async function VitrinPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -57,7 +58,7 @@ export default async function VitrinPage({ params }: { params: Promise<{ slug: s
     commentsByItem.set(comment.portfolioItemId, list);
   }
 
-  const [followerCount, isFollowing] = await Promise.all([
+  const [followerCount, isFollowing, reviews, isEligibleToReview] = await Promise.all([
     prisma.follow.count({ where: { followingId: profile.userId } }),
     session
       ? prisma.follow
@@ -65,6 +66,17 @@ export default async function VitrinPage({ params }: { params: Promise<{ slug: s
             where: { followerId_followingId: { followerId: session.userId, followingId: profile.userId } },
           })
           .then(Boolean)
+      : Promise.resolve(false),
+    prisma.review.findMany({ where: { targetUserId: profile.userId }, orderBy: { createdAt: "desc" } }),
+    session && session.userId !== profile.userId
+      ? Promise.all([
+          prisma.jobOffer.findFirst({
+            where: { senderId: session.userId, recipientId: profile.userId, status: "ACCEPTED" },
+          }),
+          prisma.courseRequest.findFirst({
+            where: { studentId: session.userId, status: "ACCEPTED", course: { profileId: profile.id } },
+          }),
+        ]).then(([offer, courseRequest]) => Boolean(offer || courseRequest))
       : Promise.resolve(false),
   ]);
 
@@ -105,6 +117,15 @@ export default async function VitrinPage({ params }: { params: Promise<{ slug: s
             </p>
             <p className="mt-1 text-sm text-white/50">
               <span className="font-semibold text-white">{followerCount}</span> {t.followers}
+              {reviews.length > 0 && (
+                <>
+                  {" · "}
+                  <span className="text-gold-light">
+                    ★ {(reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1)}
+                  </span>{" "}
+                  ({reviews.length})
+                </>
+              )}
             </p>
           </div>
         </div>
@@ -199,6 +220,21 @@ export default async function VitrinPage({ params }: { params: Promise<{ slug: s
             ))}
           </ul>
         )}
+
+        <h2 className="mt-12 text-xl font-bold text-white">{translations[locale].reviews.sectionTitle}</h2>
+        <div className="mt-4">
+          <ReviewsSection
+            targetUserId={profile.userId}
+            isEligible={isEligibleToReview}
+            initialReviews={reviews.map((review) => ({
+              id: review.id,
+              authorName: review.authorName,
+              rating: review.rating,
+              comment: review.comment,
+              isOwn: session?.userId === review.authorId,
+            }))}
+          />
+        </div>
       </div>
     </div>
   );

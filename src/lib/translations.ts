@@ -269,6 +269,21 @@ type AdminCopy = {
   commentsDeleteConfirm: string;
 };
 
+type ReviewsCopy = {
+  sectionTitle: string;
+  countOne: string;
+  countOther: string;
+  empty: string;
+  formTitle: string;
+  ratingLabel: string;
+  commentPlaceholder: string;
+  submit: string;
+  editSubmit: string;
+  delete: string;
+  sentSuccess: string;
+  sendError: string;
+};
+
 type NotificationsCopy = {
   title: string;
   empty: string;
@@ -282,7 +297,8 @@ type NotificationsCopy = {
     | "JOB_OFFER_DECLINED"
     | "COURSE_REQUEST"
     | "COURSE_REQUEST_ACCEPTED"
-    | "COURSE_REQUEST_DECLINED",
+    | "COURSE_REQUEST_DECLINED"
+    | "REVIEW",
     string
   >;
 };
@@ -308,6 +324,7 @@ export type Translations = {
   courses: CoursesCopy;
   comments: CommentsCopy;
   notifications: NotificationsCopy;
+  reviews: ReviewsCopy;
   admin: AdminCopy;
   footer: FooterCopy;
 };
@@ -613,7 +630,22 @@ export const translations: Record<Locale, Translations> = {
         COURSE_REQUEST: "{name} eğitimine talep gönderdi.",
         COURSE_REQUEST_ACCEPTED: "{name} eğitim talebini kabul etti.",
         COURSE_REQUEST_DECLINED: "{name} eğitim talebini reddetti.",
+        REVIEW: "{name} seni değerlendirdi.",
       },
+    },
+    reviews: {
+      sectionTitle: "Değerlendirmeler",
+      countOne: "değerlendirme",
+      countOther: "değerlendirme",
+      empty: "Henüz değerlendirme yok.",
+      formTitle: "Değerlendirme Yap",
+      ratingLabel: "Puan",
+      commentPlaceholder: "Deneyimini paylaş (opsiyonel)",
+      submit: "Gönder",
+      editSubmit: "Güncelle",
+      delete: "Sil",
+      sentSuccess: "Değerlendirmen kaydedildi.",
+      sendError: "Değerlendirme gönderilemedi, tekrar dene.",
     },
     admin: {
       title: "Admin Paneli",
@@ -938,7 +970,22 @@ export const translations: Record<Locale, Translations> = {
         COURSE_REQUEST: "{name} requested your course.",
         COURSE_REQUEST_ACCEPTED: "{name} accepted your course request.",
         COURSE_REQUEST_DECLINED: "{name} declined your course request.",
+        REVIEW: "{name} left you a review.",
       },
+    },
+    reviews: {
+      sectionTitle: "Reviews",
+      countOne: "review",
+      countOther: "reviews",
+      empty: "No reviews yet.",
+      formTitle: "Leave a Review",
+      ratingLabel: "Rating",
+      commentPlaceholder: "Share your experience (optional)",
+      submit: "Submit",
+      editSubmit: "Update",
+      delete: "Delete",
+      sentSuccess: "Your review has been saved.",
+      sendError: "Couldn't submit the review, try again.",
     },
     admin: {
       title: "Admin Panel",

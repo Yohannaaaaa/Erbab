@@ -48,6 +48,7 @@ enum NotificationType {
   COURSE_REQUEST
   COURSE_REQUEST_ACCEPTED
   COURSE_REQUEST_DECLINED
+  REVIEW
 }
 
 model User {
@@ -68,6 +69,7 @@ model User {
   courseRequests CourseRequest[] @relation("CourseStudent")
   notifications  Notification[]
   passwordResetTokens PasswordResetToken[]
+  reviewsReceived Review[] @relation("ReviewTarget")
 }
 
 model PasswordResetToken {
@@ -178,6 +180,20 @@ model Comment {
   portfolioItem   PortfolioItem @relation(fields: [portfolioItemId], references: [id], onDelete: Cascade)
   body            String
   createdAt       DateTime      @default(now())
+}
+
+model Review {
+  id           String   @id @default(cuid())
+  authorId     String
+  authorName   String
+  targetUserId String
+  target       User     @relation("ReviewTarget", fields: [targetUserId], references: [id], onDelete: Cascade)
+  rating       Int
+  comment      String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@unique([authorId, targetUserId])
 }
 
 model Notification {
