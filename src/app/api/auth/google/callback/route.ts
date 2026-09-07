@@ -3,6 +3,7 @@ import { prisma } from "@/lib/db";
 import { createSession, verifyOAuthState } from "@/lib/auth";
 import { generateUniqueSlug } from "@/lib/slug";
 import { exchangeGoogleCode } from "@/lib/google-oauth";
+import { syncAdminStatus } from "@/lib/admin";
 
 export async function GET(request: Request) {
   const url = new URL(request.url);
@@ -55,7 +56,8 @@ export async function GET(request: Request) {
       }
     }
 
-    await createSession({ userId: user.id, email: user.email, name: user.name, role: user.role });
+    const isAdmin = await syncAdminStatus(user);
+    await createSession({ userId: user.id, email: user.email, name: user.name, role: user.role, isAdmin });
 
     return NextResponse.redirect(new URL("/panel", url.origin));
   } catch {

@@ -47,7 +47,9 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="min-h-full flex flex-col bg-black">
         <LanguageProvider initialLocale={locale}>
-          <Header authUser={session ? { name: session.name, role: session.role } : null} />
+          <Header
+            authUser={session ? { name: session.name, role: session.role, isAdmin: session.isAdmin } : null}
+          />
           <main className="flex flex-1 flex-col">{children}</main>
           <Footer />
         </LanguageProvider>

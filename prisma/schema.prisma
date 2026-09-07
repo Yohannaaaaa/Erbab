@@ -57,6 +57,7 @@ model User {
   googleId     String?  @unique
   name         String
   role         Role
+  isAdmin      Boolean  @default(false)
   createdAt    DateTime @default(now())
 
   profile       Profile?

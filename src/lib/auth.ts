@@ -18,6 +18,7 @@ export type SessionPayload = {
   email: string;
   name: string;
   role: "ERBAB" | "GOZLEMCI" | "ISVEREN";
+  isAdmin: boolean;
 };
 
 export async function hashPassword(password: string) {

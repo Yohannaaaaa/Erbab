@@ -11,10 +11,12 @@ export async function proxy(request: NextRequest) {
   const token = request.cookies.get(SESSION_COOKIE)?.value;
 
   let isAuthenticated = false;
+  let isAdmin = false;
   if (token) {
     try {
-      await jwtVerify(token, getSecretKey());
+      const { payload } = await jwtVerify(token, getSecretKey());
       isAuthenticated = true;
+      isAdmin = payload.isAdmin === true;
     } catch {
       isAuthenticated = false;
     }
@@ -26,9 +28,13 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(loginUrl);
   }
 
+  if (request.nextUrl.pathname.startsWith("/admin") && !isAdmin) {
+    return NextResponse.redirect(new URL(isAuthenticated ? "/panel" : "/giris", request.url));
+  }
+
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/panel/:path*"],
+  matcher: ["/panel/:path*", "/admin/:path*"],
 };

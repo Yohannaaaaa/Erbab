@@ -8,6 +8,7 @@ type NavCopy = {
   login: string;
   register: string;
   panel: string;
+  admin: string;
 };
 
 type HeroCopy = {
@@ -231,6 +232,29 @@ type CommentsCopy = {
   delete: string;
 };
 
+type AdminCopy = {
+  title: string;
+  statsUsers: string;
+  statsProfiles: string;
+  statsPortfolioItems: string;
+  statsJobOffers: string;
+  statsCourseRequests: string;
+  statsComments: string;
+  usersTitle: string;
+  usersName: string;
+  usersEmail: string;
+  usersRole: string;
+  usersJoined: string;
+  usersAdminBadge: string;
+  usersDelete: string;
+  usersDeleteConfirm: string;
+  commentsTitle: string;
+  commentsEmpty: string;
+  commentsOn: string;
+  commentsDelete: string;
+  commentsDeleteConfirm: string;
+};
+
 type NotificationsCopy = {
   title: string;
   empty: string;
@@ -270,6 +294,7 @@ export type Translations = {
   courses: CoursesCopy;
   comments: CommentsCopy;
   notifications: NotificationsCopy;
+  admin: AdminCopy;
   footer: FooterCopy;
 };
 
@@ -283,6 +308,7 @@ export const translations: Record<Locale, Translations> = {
       login: "Giriş Yap",
       register: "Kayıt Ol",
       panel: "Panelim",
+      admin: "Admin",
     },
     hero: {
       eyebrow: "erbab.com",
@@ -561,6 +587,28 @@ export const translations: Record<Locale, Translations> = {
         COURSE_REQUEST_DECLINED: "{name} eğitim talebini reddetti.",
       },
     },
+    admin: {
+      title: "Admin Paneli",
+      statsUsers: "Kullanıcı",
+      statsProfiles: "Erbab Profili",
+      statsPortfolioItems: "Portföy Öğesi",
+      statsJobOffers: "İş Teklifi",
+      statsCourseRequests: "Eğitim Talebi",
+      statsComments: "Yorum",
+      usersTitle: "Kullanıcılar",
+      usersName: "İsim",
+      usersEmail: "E-posta",
+      usersRole: "Rol",
+      usersJoined: "Katılım",
+      usersAdminBadge: "Admin",
+      usersDelete: "Sil",
+      usersDeleteConfirm: "Bu kullanıcıyı ve tüm içeriğini kalıcı olarak silmek istediğine emin misin?",
+      commentsTitle: "Yorumlar (Moderasyon)",
+      commentsEmpty: "Henüz yorum yok.",
+      commentsOn: "üzerine",
+      commentsDelete: "Sil",
+      commentsDeleteConfirm: "Bu yorumu kalıcı olarak silmek istediğine emin misin?",
+    },
   },
   en: {
     nav: {
@@ -571,6 +619,7 @@ export const translations: Record<Locale, Translations> = {
       login: "Log In",
       register: "Sign Up",
       panel: "My Panel",
+      admin: "Admin",
     },
     hero: {
       eyebrow: "erbab.com",
@@ -848,6 +897,28 @@ export const translations: Record<Locale, Translations> = {
         COURSE_REQUEST_ACCEPTED: "{name} accepted your course request.",
         COURSE_REQUEST_DECLINED: "{name} declined your course request.",
       },
+    },
+    admin: {
+      title: "Admin Panel",
+      statsUsers: "Users",
+      statsProfiles: "Erbab Profiles",
+      statsPortfolioItems: "Portfolio Items",
+      statsJobOffers: "Job Offers",
+      statsCourseRequests: "Course Requests",
+      statsComments: "Comments",
+      usersTitle: "Users",
+      usersName: "Name",
+      usersEmail: "Email",
+      usersRole: "Role",
+      usersJoined: "Joined",
+      usersAdminBadge: "Admin",
+      usersDelete: "Delete",
+      usersDeleteConfirm: "Are you sure you want to permanently delete this user and all their content?",
+      commentsTitle: "Comments (Moderation)",
+      commentsEmpty: "No comments yet.",
+      commentsOn: "on",
+      commentsDelete: "Delete",
+      commentsDeleteConfirm: "Are you sure you want to permanently delete this comment?",
     },
   },
 };

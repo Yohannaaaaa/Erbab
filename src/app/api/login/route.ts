@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { verifyPassword, createSession } from "@/lib/auth";
 import { loginSchema } from "@/lib/validation";
+import { syncAdminStatus } from "@/lib/admin";
 
 export async function POST(request: Request) {
   const body = await request.json().catch(() => null);
@@ -21,7 +22,8 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "E-posta veya şifre hatalı" }, { status: 401 });
   }
 
-  await createSession({ userId: user.id, email: user.email, name: user.name, role: user.role });
+  const isAdmin = await syncAdminStatus(user);
+  await createSession({ userId: user.id, email: user.email, name: user.name, role: user.role, isAdmin });
 
   return NextResponse.json({ ok: true, slug: user.profile?.slug ?? null });
 }

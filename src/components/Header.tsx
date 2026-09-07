@@ -7,7 +7,7 @@ import { useLanguage } from "@/lib/language-context";
 import { LogoutButton } from "@/components/LogoutButton";
 import { NotificationsBell } from "@/components/NotificationsBell";
 
-type AuthUser = { name: string; role: "ERBAB" | "GOZLEMCI" | "ISVEREN" } | null;
+type AuthUser = { name: string; role: "ERBAB" | "GOZLEMCI" | "ISVEREN"; isAdmin: boolean } | null;
 
 export function Header({ authUser }: { authUser: AuthUser }) {
   const { t, locale, setLocale } = useLanguage();
@@ -57,6 +57,11 @@ export function Header({ authUser }: { authUser: AuthUser }) {
           {authUser ? (
             <div className="hidden items-center gap-3 sm:flex">
               <NotificationsBell />
+              {authUser.isAdmin && (
+                <Link href="/admin" className="text-sm font-medium text-white/70 hover:text-white">
+                  {t.nav.admin}
+                </Link>
+              )}
               <Link
                 href="/panel"
                 className="rounded-full bg-gold px-4 py-2 text-sm font-semibold text-black hover:bg-gold-light"
@@ -116,6 +121,11 @@ export function Header({ authUser }: { authUser: AuthUser }) {
                   {t.nav.panel}
                 </Link>
               </div>
+              {authUser.isAdmin && (
+                <Link href="/admin" onClick={() => setOpen(false)} className="font-semibold text-white/70">
+                  {t.nav.admin}
+                </Link>
+              )}
               <LogoutButton className="text-left text-white/50" />
             </>
           ) : (
