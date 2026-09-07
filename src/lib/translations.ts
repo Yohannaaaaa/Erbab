@@ -116,6 +116,8 @@ type AuthCopy = {
   googleCta: string;
   orDivider: string;
   oauthError: string;
+  showPassword: string;
+  hidePassword: string;
 };
 
 type PanelCopy = {
@@ -461,6 +463,8 @@ export const translations: Record<Locale, Translations> = {
       googleCta: "Google ile Devam Et",
       orDivider: "veya",
       oauthError: "Google ile giriş başarısız oldu, tekrar dene.",
+      showPassword: "Şifreyi göster",
+      hidePassword: "Şifreyi gizle",
     },
     panel: {
       welcome: "Hoş geldin",
@@ -772,6 +776,8 @@ export const translations: Record<Locale, Translations> = {
       googleCta: "Continue with Google",
       orDivider: "or",
       oauthError: "Google sign-in failed, please try again.",
+      showPassword: "Show password",
+      hidePassword: "Hide password",
     },
     panel: {
       welcome: "Welcome",

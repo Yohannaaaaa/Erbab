@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useLanguage } from "@/lib/language-context";
 import { AuthShell } from "@/components/AuthShell";
 import { GoogleButton } from "@/components/GoogleButton";
+import { PasswordInput } from "@/components/PasswordInput";
 
 export default function RegisterPage() {
   const { t } = useLanguage();
@@ -97,13 +98,12 @@ export default function RegisterPage() {
 
         <label className="flex flex-col gap-1.5 text-sm text-white/80">
           {t.auth.passwordLabel}
-          <input
-            type="password"
+          <PasswordInput
+            value={password}
+            onChange={setPassword}
             required
             minLength={8}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="rounded-lg border border-white/15 bg-black/40 px-4 py-2.5 text-white outline-none focus:border-gold"
+            autoComplete="new-password"
           />
         </label>
 
