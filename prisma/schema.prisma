@@ -49,6 +49,7 @@ enum NotificationType {
   COURSE_REQUEST_ACCEPTED
   COURSE_REQUEST_DECLINED
   REVIEW
+  MESSAGE
 }
 
 model User {
@@ -70,6 +71,8 @@ model User {
   notifications  Notification[]
   passwordResetTokens PasswordResetToken[]
   reviewsReceived Review[] @relation("ReviewTarget")
+  sentMessages     Message[] @relation("MessageSender")
+  receivedMessages Message[] @relation("MessageRecipient")
 }
 
 model PasswordResetToken {
@@ -194,6 +197,20 @@ model Review {
   updatedAt    DateTime @updatedAt
 
   @@unique([authorId, targetUserId])
+}
+
+model Message {
+  id          String   @id @default(cuid())
+  senderId    String
+  sender      User     @relation("MessageSender", fields: [senderId], references: [id], onDelete: Cascade)
+  recipientId String
+  recipient   User     @relation("MessageRecipient", fields: [recipientId], references: [id], onDelete: Cascade)
+  body        String
+  read        Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  @@index([senderId, recipientId])
+  @@index([recipientId, senderId])
 }
 
 model Notification {

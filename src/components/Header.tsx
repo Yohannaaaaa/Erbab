@@ -56,6 +56,9 @@ export function Header({ authUser }: { authUser: AuthUser }) {
 
           {authUser ? (
             <div className="hidden items-center gap-3 sm:flex">
+              <Link href="/panel/mesajlar" className="text-sm font-medium text-white/70 hover:text-white">
+                {t.dm.inboxTitle}
+              </Link>
               <NotificationsBell />
               {authUser.isAdmin && (
                 <Link href="/admin" className="text-sm font-medium text-white/70 hover:text-white">
@@ -121,6 +124,9 @@ export function Header({ authUser }: { authUser: AuthUser }) {
                   {t.nav.panel}
                 </Link>
               </div>
+              <Link href="/panel/mesajlar" onClick={() => setOpen(false)} className="font-semibold text-white/70">
+                {t.dm.inboxTitle}
+              </Link>
               {authUser.isAdmin && (
                 <Link href="/admin" onClick={() => setOpen(false)} className="font-semibold text-white/70">
                   {t.nav.admin}

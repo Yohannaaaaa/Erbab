@@ -39,6 +39,14 @@ export function VitrinActions({
     window.setTimeout(() => setMessage(null), 2500);
   };
 
+  const sendMessage = () => {
+    if (!isLoggedIn) {
+      requireLogin();
+      return;
+    }
+    router.push(`/panel/mesajlar/${targetUserId}`);
+  };
+
   const toggleFollow = async () => {
     if (!isLoggedIn) {
       requireLogin();
@@ -120,6 +128,15 @@ export function VitrinActions({
             }
           >
             {following ? t.vitrin.following : t.vitrin.follow}
+          </button>
+        )}
+
+        {!isOwnProfile && (
+          <button
+            onClick={sendMessage}
+            className="rounded-full border border-white/20 px-5 py-2.5 text-sm font-semibold text-white hover:bg-white/10"
+          >
+            {t.dm.sendMessage}
           </button>
         )}
 

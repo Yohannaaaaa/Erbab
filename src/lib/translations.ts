@@ -284,6 +284,15 @@ type ReviewsCopy = {
   sendError: string;
 };
 
+type DirectMessagesCopy = {
+  sendMessage: string;
+  inboxTitle: string;
+  inboxEmpty: string;
+  placeholder: string;
+  send: string;
+  backToInbox: string;
+};
+
 type NotificationsCopy = {
   title: string;
   empty: string;
@@ -298,7 +307,8 @@ type NotificationsCopy = {
     | "COURSE_REQUEST"
     | "COURSE_REQUEST_ACCEPTED"
     | "COURSE_REQUEST_DECLINED"
-    | "REVIEW",
+    | "REVIEW"
+    | "MESSAGE",
     string
   >;
 };
@@ -324,6 +334,7 @@ export type Translations = {
   courses: CoursesCopy;
   comments: CommentsCopy;
   notifications: NotificationsCopy;
+  dm: DirectMessagesCopy;
   reviews: ReviewsCopy;
   admin: AdminCopy;
   footer: FooterCopy;
@@ -631,7 +642,16 @@ export const translations: Record<Locale, Translations> = {
         COURSE_REQUEST_ACCEPTED: "{name} eğitim talebini kabul etti.",
         COURSE_REQUEST_DECLINED: "{name} eğitim talebini reddetti.",
         REVIEW: "{name} seni değerlendirdi.",
+        MESSAGE: "{name} sana mesaj gönderdi.",
       },
+    },
+    dm: {
+      sendMessage: "Mesaj Gönder",
+      inboxTitle: "Mesajlar",
+      inboxEmpty: "Henüz mesajın yok.",
+      placeholder: "Bir mesaj yaz...",
+      send: "Gönder",
+      backToInbox: "Mesajlara dön",
     },
     reviews: {
       sectionTitle: "Değerlendirmeler",
@@ -971,7 +991,16 @@ export const translations: Record<Locale, Translations> = {
         COURSE_REQUEST_ACCEPTED: "{name} accepted your course request.",
         COURSE_REQUEST_DECLINED: "{name} declined your course request.",
         REVIEW: "{name} left you a review.",
+        MESSAGE: "{name} sent you a message.",
       },
+    },
+    dm: {
+      sendMessage: "Send Message",
+      inboxTitle: "Messages",
+      inboxEmpty: "No messages yet.",
+      placeholder: "Write a message...",
+      send: "Send",
+      backToInbox: "Back to inbox",
     },
     reviews: {
       sectionTitle: "Reviews",
