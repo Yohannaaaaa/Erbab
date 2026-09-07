@@ -23,7 +23,7 @@ export async function PATCH(request: Request) {
     return NextResponse.json({ error: "Profil bulunamadı" }, { status: 404 });
   }
 
-  const { title, bio, location, category, skills, yearsExperience } = parsed.data;
+  const { title, bio, location, category, skills, yearsExperience, avatarUrl } = parsed.data;
 
   await prisma.profile.update({
     where: { userId: session.userId },
@@ -34,6 +34,7 @@ export async function PATCH(request: Request) {
       category: category || null,
       skills: skills || null,
       yearsExperience: yearsExperience ?? null,
+      avatarUrl: avatarUrl || null,
     },
   });
 

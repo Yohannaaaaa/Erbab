@@ -125,6 +125,7 @@ type PanelCopy = {
   logout: string;
   noProfileYet: string;
   editTitle: string;
+  avatarLabel: string;
   titleLabel: string;
   bioLabel: string;
   locationLabel: string;
@@ -376,6 +377,7 @@ export const translations: Record<Locale, Translations> = {
       logout: "Çıkış Yap",
       noProfileYet: "Vitrin sayfası yalnızca Erbab hesapları için oluşturulur.",
       editTitle: "Vitrinini Düzenle",
+      avatarLabel: "Profil Fotoğrafı (URL)",
       titleLabel: "Unvan",
       bioLabel: "Hakkında",
       locationLabel: "Konum",
@@ -603,6 +605,7 @@ export const translations: Record<Locale, Translations> = {
       logout: "Log Out",
       noProfileYet: "A showcase page is only created for Erbab accounts.",
       editTitle: "Edit Your Showcase",
+      avatarLabel: "Profile Photo (URL)",
       titleLabel: "Title",
       bioLabel: "About",
       locationLabel: "Location",

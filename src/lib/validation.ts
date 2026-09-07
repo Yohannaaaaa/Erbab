@@ -19,4 +19,5 @@ export const profileSchema = z.object({
   category: z.string().trim().max(80).optional().or(z.literal("")),
   skills: z.string().trim().max(300).optional().or(z.literal("")),
   yearsExperience: z.coerce.number().int().min(0).max(80).optional(),
+  avatarUrl: z.string().trim().url().max(500).optional().or(z.literal("")),
 });

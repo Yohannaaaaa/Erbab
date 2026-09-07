@@ -4,6 +4,8 @@ import { translations } from "@/lib/translations";
 import { getServerLocale } from "@/lib/locale-server";
 import { getSession } from "@/lib/auth";
 import { VitrinActions } from "@/components/VitrinActions";
+import { LikeButton } from "@/components/LikeButton";
+import { Avatar } from "@/components/Avatar";
 
 export default async function VitrinPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -24,6 +26,24 @@ export default async function VitrinPage({ params }: { params: Promise<{ slug: s
     notFound();
   }
 
+  const itemIds = profile.portfolioItems.map((item) => item.id);
+  const [likeCounts, likedItemIds] = await Promise.all([
+    prisma.like.groupBy({
+      by: ["portfolioItemId"],
+      where: { portfolioItemId: { in: itemIds } },
+      _count: { portfolioItemId: true },
+    }),
+    session
+      ? prisma.like
+          .findMany({
+            where: { userId: session.userId, portfolioItemId: { in: itemIds } },
+            select: { portfolioItemId: true },
+          })
+          .then((rows) => new Set(rows.map((row) => row.portfolioItemId)))
+      : Promise.resolve(new Set<string>()),
+  ]);
+  const likeCountMap = new Map(likeCounts.map((row) => [row.portfolioItemId, row._count.portfolioItemId]));
+
   const [followerCount, isFollowing] = await Promise.all([
     prisma.follow.count({ where: { followingId: profile.userId } }),
     session
@@ -40,20 +60,16 @@ export default async function VitrinPage({ params }: { params: Promise<{ slug: s
   const skills = profile.skills
     ? profile.skills.split(",").map((s) => s.trim()).filter(Boolean)
     : [];
-  const initials = profile.user.name
-    .split(" ")
-    .map((part) => part[0])
-    .slice(0, 2)
-    .join("")
-    .toUpperCase();
 
   return (
     <div className="min-h-[calc(100vh-64px)] bg-black">
       <div className="mx-auto max-w-4xl px-6 py-16">
         <div className="flex flex-col items-start gap-6 sm:flex-row sm:items-center">
-          <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-gold to-gold-dark text-3xl font-bold text-black">
-            {initials}
-          </div>
+          <Avatar
+            src={profile.avatarUrl}
+            name={profile.user.name}
+            className="h-24 w-24 shrink-0 text-3xl"
+          />
           <div>
             <h1 className="text-3xl font-bold text-white">{profile.user.name}</h1>
             {profile.title && <p className="mt-1 text-lg text-gold-light">{profile.title}</p>}
@@ -108,9 +124,17 @@ export default async function VitrinPage({ params }: { params: Promise<{ slug: s
           <ul className="mt-4 grid gap-4 sm:grid-cols-2">
             {profile.portfolioItems.map((item) => (
               <li key={item.id} className="rounded-xl border border-white/10 bg-white/[0.03] p-5">
-                <span className="text-xs font-semibold uppercase tracking-wide text-gold-light">
-                  {itemTypeLabels[item.type]}
-                </span>
+                <div className="flex items-start justify-between gap-3">
+                  <span className="text-xs font-semibold uppercase tracking-wide text-gold-light">
+                    {itemTypeLabels[item.type]}
+                  </span>
+                  <LikeButton
+                    portfolioItemId={item.id}
+                    initialLiked={likedItemIds.has(item.id)}
+                    initialLikeCount={likeCountMap.get(item.id) ?? 0}
+                    isLoggedIn={Boolean(session)}
+                  />
+                </div>
                 <p className="mt-1 font-semibold text-white">{item.title}</p>
                 {item.description && <p className="mt-1 text-sm text-white/60">{item.description}</p>}
                 {item.url && (

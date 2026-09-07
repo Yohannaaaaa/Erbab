@@ -94,4 +94,16 @@ model PortfolioItem {
   description String?
   url         String?
   createdAt   DateTime          @default(now())
+
+  likes Like[]
+}
+
+model Like {
+  id              String        @id @default(cuid())
+  userId          String
+  portfolioItemId String
+  portfolioItem   PortfolioItem @relation(fields: [portfolioItemId], references: [id], onDelete: Cascade)
+  createdAt       DateTime      @default(now())
+
+  @@unique([userId, portfolioItemId])
 }

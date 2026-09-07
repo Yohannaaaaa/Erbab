@@ -19,6 +19,7 @@ type ProfileData = {
   category: string | null;
   skills: string | null;
   yearsExperience: number | null;
+  avatarUrl: string | null;
 };
 
 export function ProfileEditor({
@@ -41,6 +42,7 @@ export function ProfileEditor({
   const [yearsExperience, setYearsExperience] = useState(
     profile.yearsExperience != null ? String(profile.yearsExperience) : "",
   );
+  const [avatarUrl, setAvatarUrl] = useState(profile.avatarUrl ?? "");
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
 
@@ -66,6 +68,7 @@ export function ProfileEditor({
         category,
         skills,
         yearsExperience: yearsExperience ? Number(yearsExperience) : undefined,
+        avatarUrl,
       }),
     });
 
@@ -115,6 +118,28 @@ export function ProfileEditor({
       <h1 className="mt-4 text-2xl font-bold text-white">{t.panel.editTitle}</h1>
 
       <form onSubmit={handleSave} className="mt-6 flex flex-col gap-4 rounded-2xl border border-white/10 bg-white/[0.03] p-8">
+        <label className="flex flex-col gap-1.5 text-sm text-white/80">
+          {t.panel.avatarLabel}
+          <div className="flex items-center gap-4">
+            {avatarUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element -- arbitrary user-provided URL, not a local/optimizable asset
+              <img
+                src={avatarUrl}
+                alt=""
+                className="h-14 w-14 rounded-full object-cover"
+                onError={(e) => (e.currentTarget.style.visibility = "hidden")}
+              />
+            ) : null}
+            <input
+              type="url"
+              value={avatarUrl}
+              onChange={(e) => setAvatarUrl(e.target.value)}
+              placeholder="https://..."
+              className="flex-1 rounded-lg border border-white/15 bg-black/40 px-4 py-2.5 text-white outline-none focus:border-gold"
+            />
+          </div>
+        </label>
+
         <label className="flex flex-col gap-1.5 text-sm text-white/80">
           {t.panel.titleLabel}
           <input

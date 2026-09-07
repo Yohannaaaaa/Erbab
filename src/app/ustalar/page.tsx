@@ -90,6 +90,7 @@ export default async function UstalarPage({
                   title: profile.title,
                   category: profile.category,
                   location: profile.location,
+                  avatarUrl: profile.avatarUrl,
                 }}
               />
             ))}

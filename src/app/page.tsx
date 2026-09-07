@@ -25,6 +25,7 @@ export default async function Home() {
     title: profile.title,
     category: profile.category,
     location: profile.location,
+    avatarUrl: profile.avatarUrl,
   }));
 
   return (

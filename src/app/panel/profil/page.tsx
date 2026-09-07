@@ -32,6 +32,7 @@ export default async function ProfileEditPage() {
           category: profile.category,
           skills: profile.skills,
           yearsExperience: profile.yearsExperience,
+          avatarUrl: profile.avatarUrl,
         }}
         portfolioItems={profile.portfolioItems}
       />
