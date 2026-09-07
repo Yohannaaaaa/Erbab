@@ -1,8 +1,11 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useState, type ChangeEvent, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { useLanguage } from "@/lib/language-context";
+import { compressImageFile } from "@/lib/image";
+
+const MAX_AVATAR_FILE_BYTES = 8 * 1024 * 1024;
 
 type PortfolioItem = {
   id: string;
@@ -53,8 +56,37 @@ export function ProfileEditor({
     profile.yearsExperience != null ? String(profile.yearsExperience) : "",
   );
   const [avatarUrl, setAvatarUrl] = useState(profile.avatarUrl ?? "");
+  const [avatarError, setAvatarError] = useState<string | null>(null);
+  const [avatarProcessing, setAvatarProcessing] = useState(false);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+
+  const handleAvatarChange = async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+    if (!file) return;
+
+    setAvatarError(null);
+
+    if (!file.type.startsWith("image/")) {
+      setAvatarError(t.panel.avatarInvalidType);
+      return;
+    }
+    if (file.size > MAX_AVATAR_FILE_BYTES) {
+      setAvatarError(t.panel.avatarTooLarge);
+      return;
+    }
+
+    setAvatarProcessing(true);
+    try {
+      const compressed = await compressImageFile(file);
+      setAvatarUrl(compressed);
+    } catch {
+      setAvatarError(t.panel.avatarProcessError);
+    } finally {
+      setAvatarProcessing(false);
+    }
+  };
 
   const [items, setItems] = useState(portfolioItems);
   const [itemType, setItemType] = useState<PortfolioItem["type"]>("PROJECT");
@@ -171,21 +203,40 @@ export function ProfileEditor({
           {t.panel.avatarLabel}
           <div className="flex items-center gap-4">
             {avatarUrl ? (
-              // eslint-disable-next-line @next/next/no-img-element -- arbitrary user-provided URL, not a local/optimizable asset
+              // eslint-disable-next-line @next/next/no-img-element -- browser-generated data URL, not a local/optimizable asset
               <img
                 src={avatarUrl}
                 alt=""
-                className="h-14 w-14 rounded-full object-cover"
+                className="h-16 w-16 rounded-full object-cover"
                 onError={(e) => (e.currentTarget.style.visibility = "hidden")}
               />
-            ) : null}
-            <input
-              type="url"
-              value={avatarUrl}
-              onChange={(e) => setAvatarUrl(e.target.value)}
-              placeholder="https://..."
-              className="flex-1 rounded-lg border border-white/15 bg-black/40 px-4 py-2.5 text-white outline-none focus:border-gold"
-            />
+            ) : (
+              <div className="h-16 w-16 shrink-0 rounded-full border border-dashed border-white/20" />
+            )}
+            <div className="flex flex-col gap-1.5">
+              <div className="flex items-center gap-3">
+                <label className="cursor-pointer rounded-full border border-white/20 px-4 py-2 text-xs font-semibold text-white hover:bg-white/10">
+                  {avatarProcessing ? t.panel.avatarProcessing : t.panel.avatarChoose}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleAvatarChange}
+                    disabled={avatarProcessing}
+                    className="hidden"
+                  />
+                </label>
+                {avatarUrl && (
+                  <button
+                    type="button"
+                    onClick={() => setAvatarUrl("")}
+                    className="text-xs text-white/50 hover:text-red-400"
+                  >
+                    {t.panel.avatarRemove}
+                  </button>
+                )}
+              </div>
+              {avatarError && <p className="text-xs text-red-400">{avatarError}</p>}
+            </div>
           </div>
         </label>
 

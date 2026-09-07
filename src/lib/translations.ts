@@ -126,6 +126,12 @@ type PanelCopy = {
   noProfileYet: string;
   editTitle: string;
   avatarLabel: string;
+  avatarChoose: string;
+  avatarRemove: string;
+  avatarProcessing: string;
+  avatarInvalidType: string;
+  avatarTooLarge: string;
+  avatarProcessError: string;
   titleLabel: string;
   bioLabel: string;
   locationLabel: string;
@@ -408,7 +414,13 @@ export const translations: Record<Locale, Translations> = {
       logout: "Çıkış Yap",
       noProfileYet: "Vitrin sayfası yalnızca Erbab hesapları için oluşturulur.",
       editTitle: "Vitrinini Düzenle",
-      avatarLabel: "Profil Fotoğrafı (URL)",
+      avatarLabel: "Profil Fotoğrafı",
+      avatarChoose: "Fotoğraf Seç",
+      avatarRemove: "Kaldır",
+      avatarProcessing: "Yükleniyor...",
+      avatarInvalidType: "Lütfen bir görsel dosyası seç.",
+      avatarTooLarge: "Dosya çok büyük (en fazla 8 MB).",
+      avatarProcessError: "Fotoğraf işlenemedi, tekrar dene.",
       titleLabel: "Unvan",
       bioLabel: "Hakkında",
       locationLabel: "Konum",
@@ -665,7 +677,13 @@ export const translations: Record<Locale, Translations> = {
       logout: "Log Out",
       noProfileYet: "A showcase page is only created for Erbab accounts.",
       editTitle: "Edit Your Showcase",
-      avatarLabel: "Profile Photo (URL)",
+      avatarLabel: "Profile Photo",
+      avatarChoose: "Choose Photo",
+      avatarRemove: "Remove",
+      avatarProcessing: "Uploading...",
+      avatarInvalidType: "Please choose an image file.",
+      avatarTooLarge: "File is too large (max 8 MB).",
+      avatarProcessError: "Couldn't process the photo, please try again.",
       titleLabel: "Title",
       bioLabel: "About",
       locationLabel: "Location",

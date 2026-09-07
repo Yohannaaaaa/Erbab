@@ -19,5 +19,11 @@ export const profileSchema = z.object({
   category: z.string().trim().max(80).optional().or(z.literal("")),
   skills: z.string().trim().max(300).optional().or(z.literal("")),
   yearsExperience: z.coerce.number().int().min(0).max(80).optional(),
-  avatarUrl: z.string().trim().url().max(500).optional().or(z.literal("")),
+  avatarUrl: z
+    .string()
+    .trim()
+    .max(2_000_000, "Görsel çok büyük")
+    .refine((val) => !val || val.startsWith("data:image/") || /^https?:\/\//.test(val), "Geçersiz görsel")
+    .optional()
+    .or(z.literal("")),
 });
