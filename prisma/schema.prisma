@@ -1,0 +1,227 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ERBAB
+  GOZLEMCI
+  ISVEREN
+}
+
+enum PortfolioItemType {
+  VIDEO
+  IMAGE
+  CERTIFICATE
+  PROJECT
+  TEXT
+}
+
+enum JobOfferStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+}
+
+enum CourseType {
+  COURSE
+  MENTORSHIP
+}
+
+enum CourseRequestStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+}
+
+enum NotificationType {
+  FOLLOW
+  LIKE
+  COMMENT
+  JOB_OFFER
+  JOB_OFFER_ACCEPTED
+  JOB_OFFER_DECLINED
+  COURSE_REQUEST
+  COURSE_REQUEST_ACCEPTED
+  COURSE_REQUEST_DECLINED
+  REVIEW
+  MESSAGE
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String?
+  googleId     String?  @unique
+  name         String
+  role         Role
+  isAdmin      Boolean  @default(false)
+  createdAt    DateTime @default(now())
+
+  profile       Profile?
+  following     Follow[]   @relation("Follower")
+  followers     Follow[]   @relation("Following")
+  sentOffers    JobOffer[] @relation("OfferSender")
+  receivedOffers JobOffer[] @relation("OfferRecipient")
+  courseRequests CourseRequest[] @relation("CourseStudent")
+  notifications  Notification[]
+  passwordResetTokens PasswordResetToken[]
+  reviewsReceived Review[] @relation("ReviewTarget")
+  sentMessages     Message[] @relation("MessageSender")
+  receivedMessages Message[] @relation("MessageRecipient")
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
+model JobOffer {
+  id          String         @id @default(cuid())
+  senderId    String
+  sender      User           @relation("OfferSender", fields: [senderId], references: [id], onDelete: Cascade)
+  recipientId String
+  recipient   User           @relation("OfferRecipient", fields: [recipientId], references: [id], onDelete: Cascade)
+  title       String
+  budget      String?
+  message     String
+  status      JobOfferStatus @default(PENDING)
+  createdAt   DateTime       @default(now())
+}
+
+model Follow {
+  id          String   @id @default(cuid())
+  followerId  String
+  follower    User     @relation("Follower", fields: [followerId], references: [id], onDelete: Cascade)
+  followingId String
+  following   User     @relation("Following", fields: [followingId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+
+  @@unique([followerId, followingId])
+}
+
+model Profile {
+  id             String   @id @default(cuid())
+  userId         String   @unique
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  slug           String   @unique
+  title          String?
+  bio            String?
+  location       String?
+  category       String?
+  skills         String?
+  avatarUrl      String?
+  yearsExperience Int?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  portfolioItems PortfolioItem[]
+  courses        Course[]
+}
+
+model Course {
+  id          String     @id @default(cuid())
+  profileId   String
+  profile     Profile    @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  type        CourseType
+  title       String
+  description String
+  price       String?
+  createdAt   DateTime   @default(now())
+
+  requests CourseRequest[]
+}
+
+model CourseRequest {
+  id          String               @id @default(cuid())
+  courseId    String
+  course      Course               @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  studentId   String
+  student     User                 @relation("CourseStudent", fields: [studentId], references: [id], onDelete: Cascade)
+  message     String
+  status      CourseRequestStatus  @default(PENDING)
+  createdAt   DateTime             @default(now())
+}
+
+model PortfolioItem {
+  id          String            @id @default(cuid())
+  profileId   String
+  profile     Profile           @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  type        PortfolioItemType
+  title       String
+  description String?
+  url         String?
+  createdAt   DateTime          @default(now())
+
+  likes    Like[]
+  comments Comment[]
+}
+
+model Like {
+  id              String        @id @default(cuid())
+  userId          String
+  portfolioItemId String
+  portfolioItem   PortfolioItem @relation(fields: [portfolioItemId], references: [id], onDelete: Cascade)
+  createdAt       DateTime      @default(now())
+
+  @@unique([userId, portfolioItemId])
+}
+
+model Comment {
+  id              String        @id @default(cuid())
+  userId          String
+  authorName      String
+  portfolioItemId String
+  portfolioItem   PortfolioItem @relation(fields: [portfolioItemId], references: [id], onDelete: Cascade)
+  body            String
+  createdAt       DateTime      @default(now())
+}
+
+model Review {
+  id           String   @id @default(cuid())
+  authorId     String
+  authorName   String
+  targetUserId String
+  target       User     @relation("ReviewTarget", fields: [targetUserId], references: [id], onDelete: Cascade)
+  rating       Int
+  comment      String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@unique([authorId, targetUserId])
+}
+
+model Message {
+  id          String   @id @default(cuid())
+  senderId    String
+  sender      User     @relation("MessageSender", fields: [senderId], references: [id], onDelete: Cascade)
+  recipientId String
+  recipient   User     @relation("MessageRecipient", fields: [recipientId], references: [id], onDelete: Cascade)
+  body        String
+  read        Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  @@index([senderId, recipientId])
+  @@index([recipientId, senderId])
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      NotificationType
+  actorName String
+  link      String?
+  read      Boolean          @default(false)
+  createdAt DateTime         @default(now())
+
+  @@index([userId, read])
+}
