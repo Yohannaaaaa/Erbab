@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useLanguage } from "@/lib/language-context";
 
 export function Hero() {
@@ -19,7 +20,7 @@ export function Hero() {
       <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-black/20" />
 
       <div className="relative mx-auto flex min-h-[520px] max-w-6xl flex-col items-center justify-end px-6 pb-16 pt-32 text-center sm:min-h-[640px] sm:pb-20">
-        <span className="rounded-full border border-amber-400/40 bg-amber-400/10 px-4 py-1 text-xs font-semibold uppercase tracking-widest text-amber-300">
+        <span className="rounded-full border border-gold-light/40 bg-gold-light/10 px-4 py-1 text-xs font-semibold uppercase tracking-widest text-gold-light">
           {t.hero.eyebrow}
         </span>
 
@@ -32,12 +33,12 @@ export function Hero() {
         </p>
 
         <div className="mt-10 flex flex-col gap-4 sm:flex-row">
-          <a
-            href="#erken-erisim"
-            className="rounded-full bg-amber-500 px-7 py-3 text-base font-semibold text-black shadow-lg shadow-amber-500/30 transition-transform hover:-translate-y-0.5 hover:bg-amber-400"
+          <Link
+            href="/kayit"
+            className="rounded-full bg-gold px-7 py-3 text-base font-semibold text-black shadow-lg shadow-gold/30 transition-transform hover:-translate-y-0.5 hover:bg-gold-light"
           >
             {t.hero.primaryCta}
-          </a>
+          </Link>
           <a
             href="#nasil-calisir"
             className="rounded-full border border-white/30 px-7 py-3 text-base font-semibold text-white transition-colors hover:bg-white/10"
