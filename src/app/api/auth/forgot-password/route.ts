@@ -18,6 +18,12 @@ export async function POST(request: Request) {
   const { email } = parsed.data;
   const user = await prisma.user.findUnique({ where: { email } });
 
+  if (!user) {
+    console.log(`[forgot-password] Kayıtlı kullanıcı bulunamadı: ${email}`);
+  } else if (!user.passwordHash) {
+    console.log(`[forgot-password] Kullanıcı Google ile kayıtlı, şifresi yok: ${email}`);
+  }
+
   if (user && user.passwordHash) {
     const token = randomBytes(32).toString("hex");
     const tokenHash = createHash("sha256").update(token).digest("hex");
@@ -30,6 +36,7 @@ export async function POST(request: Request) {
     const baseUrl = new URL(request.url).origin;
     const resetUrl = `${baseUrl}/sifre-sifirla?token=${token}`;
 
+    console.log(`[forgot-password] Sıfırlama e-postası gönderiliyor: ${user.email}`);
     await sendEmail({
       to: user.email,
       subject: "erbab.com - Şifre Sıfırlama",
@@ -40,6 +47,7 @@ export async function POST(request: Request) {
         <p>Bu talebi sen yapmadıysan bu e-postayı yok sayabilirsin.</p>
       `,
     });
+    console.log(`[forgot-password] sendEmail çağrısı tamamlandı: ${user.email}`);
   }
 
   return NextResponse.json({ ok: true });

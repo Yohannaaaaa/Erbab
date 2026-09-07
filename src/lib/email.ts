@@ -26,5 +26,9 @@ export async function sendEmail({ to, subject, html }: { to: string; subject: st
   if (!res.ok) {
     const body = await res.text().catch(() => "");
     console.error(`[email] Brevo gönderimi başarısız (${res.status}): ${body}`);
+    return;
   }
+
+  const body = await res.json().catch(() => null);
+  console.log(`[email] Brevo gönderimi başarılı. Alıcı: ${to}, messageId: ${body?.messageId ?? "?"}`);
 }
