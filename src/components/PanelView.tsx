@@ -11,11 +11,13 @@ export function PanelView({
   role,
   slug,
   portfolioCount,
+  followerCount,
 }: {
   name: string;
   role: Role;
   slug: string | null;
   portfolioCount: number;
+  followerCount: number;
 }) {
   const { t } = useLanguage();
 
@@ -24,9 +26,14 @@ export function PanelView({
       <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-8">
         <p className="text-sm text-white/50">{t.panel.welcome}</p>
         <h1 className="mt-1 text-2xl font-bold text-white">{name}</h1>
-        <span className="mt-3 inline-block rounded-full border border-gold/30 bg-gold/10 px-3 py-1 text-xs font-semibold text-gold-light">
-          {t.panel.roleLabels[role]}
-        </span>
+        <div className="mt-3 flex flex-wrap items-center gap-3">
+          <span className="inline-block rounded-full border border-gold/30 bg-gold/10 px-3 py-1 text-xs font-semibold text-gold-light">
+            {t.panel.roleLabels[role]}
+          </span>
+          <span className="text-sm text-white/50">
+            <span className="font-semibold text-white">{followerCount}</span> {t.vitrin.followers}
+          </span>
+        </div>
 
         {slug ? (
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">

@@ -9,13 +9,15 @@ export default async function PanelPage() {
     redirect("/giris");
   }
 
-  const profile =
+  const [profile, followerCount] = await Promise.all([
     session.role === "ERBAB"
-      ? await prisma.profile.findUnique({
+      ? prisma.profile.findUnique({
           where: { userId: session.userId },
           include: { _count: { select: { portfolioItems: true } } },
         })
-      : null;
+      : null,
+    prisma.follow.count({ where: { followingId: session.userId } }),
+  ]);
 
   return (
     <div className="min-h-[calc(100vh-64px)] bg-black">
@@ -24,6 +26,7 @@ export default async function PanelPage() {
         role={session.role}
         slug={profile?.slug ?? null}
         portfolioCount={profile?._count.portfolioItems ?? 0}
+        followerCount={followerCount}
       />
     </div>
   );

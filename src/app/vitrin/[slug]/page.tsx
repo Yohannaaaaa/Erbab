@@ -2,12 +2,13 @@ import { notFound } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { translations } from "@/lib/translations";
 import { getServerLocale } from "@/lib/locale-server";
+import { getSession } from "@/lib/auth";
 import { VitrinActions } from "@/components/VitrinActions";
 
 export default async function VitrinPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
 
-  const [profile, locale] = await Promise.all([
+  const [profile, locale, session] = await Promise.all([
     prisma.profile.findUnique({
       where: { slug },
       include: {
@@ -16,11 +17,23 @@ export default async function VitrinPage({ params }: { params: Promise<{ slug: s
       },
     }),
     getServerLocale(),
+    getSession(),
   ]);
 
   if (!profile) {
     notFound();
   }
+
+  const [followerCount, isFollowing] = await Promise.all([
+    prisma.follow.count({ where: { followingId: profile.userId } }),
+    session
+      ? prisma.follow
+          .findUnique({
+            where: { followerId_followingId: { followerId: session.userId, followingId: profile.userId } },
+          })
+          .then(Boolean)
+      : Promise.resolve(false),
+  ]);
 
   const t = translations[locale].vitrin;
   const itemTypeLabels = translations[locale].panel.itemTypes;
@@ -60,6 +73,9 @@ export default async function VitrinPage({ params }: { params: Promise<{ slug: s
                 }).format(profile.createdAt)}
               </span>
             </p>
+            <p className="mt-1 text-sm text-white/50">
+              <span className="font-semibold text-white">{followerCount}</span> {t.followers}
+            </p>
           </div>
         </div>
 
@@ -76,7 +92,12 @@ export default async function VitrinPage({ params }: { params: Promise<{ slug: s
         )}
 
         <div className="mt-8">
-          <VitrinActions />
+          <VitrinActions
+            targetUserId={profile.userId}
+            isOwnProfile={session?.userId === profile.userId}
+            isLoggedIn={Boolean(session)}
+            initialFollowing={isFollowing}
+          />
         </div>
 
         <h2 className="mt-12 text-xl font-bold text-white">{t.portfolioTitle}</h2>

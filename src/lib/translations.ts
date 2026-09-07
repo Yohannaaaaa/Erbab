@@ -155,9 +155,12 @@ type VitrinCopy = {
   empty: string;
   offerJob: string;
   follow: string;
+  following: string;
+  followers: string;
   proposeCollab: string;
   comingSoon: string;
   memberSince: string;
+  loginToFollow: string;
 };
 
 export type Translations = {
@@ -380,9 +383,12 @@ export const translations: Record<Locale, Translations> = {
       empty: "Bu Erbab henüz bir çalışma eklemedi.",
       offerJob: "İş Teklifi Gönder",
       follow: "Takip Et",
+      following: "Takip Ediliyor",
+      followers: "takipçi",
       proposeCollab: "İş Birliği Öner",
       comingSoon: "Bu özellik yakında aktif olacak.",
       memberSince: "Katılım",
+      loginToFollow: "Takip etmek için giriş yapmalısın.",
     },
   },
   en: {
@@ -584,9 +590,12 @@ export const translations: Record<Locale, Translations> = {
       empty: "This Erbab hasn't added any work yet.",
       offerJob: "Send Job Offer",
       follow: "Follow",
+      following: "Following",
+      followers: "followers",
       proposeCollab: "Propose Collaboration",
       comingSoon: "This feature is coming soon.",
       memberSince: "Member since",
+      loginToFollow: "You need to log in to follow.",
     },
   },
 };
