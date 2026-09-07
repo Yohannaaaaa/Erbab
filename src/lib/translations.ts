@@ -185,6 +185,36 @@ type OffersCopy = {
   to: string;
 };
 
+type CoursesCopy = {
+  sectionTitle: string;
+  empty: string;
+  typeLabels: Record<"COURSE" | "MENTORSHIP", string>;
+  addTitle: string;
+  typeLabel: string;
+  titleLabel: string;
+  descriptionLabel: string;
+  priceLabel: string;
+  pricePlaceholder: string;
+  add: string;
+  remove: string;
+  requestCta: string;
+  requestFormTitle: string;
+  messageLabel: string;
+  messagePlaceholder: string;
+  send: string;
+  cancel: string;
+  sentSuccess: string;
+  sendError: string;
+  receivedRequestsTitle: string;
+  myRequestsTitle: string;
+  noReceivedRequests: string;
+  noSentRequests: string;
+  accept: string;
+  decline: string;
+  statusLabels: Record<"PENDING" | "ACCEPTED" | "DECLINED", string>;
+  from: string;
+};
+
 export type Translations = {
   nav: NavCopy;
   hero: HeroCopy;
@@ -203,6 +233,7 @@ export type Translations = {
   panel: PanelCopy;
   vitrin: VitrinCopy;
   offers: OffersCopy;
+  courses: CoursesCopy;
   footer: FooterCopy;
 };
 
@@ -434,6 +465,35 @@ export const translations: Record<Locale, Translations> = {
       from: "Gönderen",
       to: "Alıcı",
     },
+    courses: {
+      sectionTitle: "Eğitim & Mentorluk",
+      empty: "Henüz bir eğitim veya mentorluk ilanı yok.",
+      typeLabels: { COURSE: "Kurs", MENTORSHIP: "Mentorluk" },
+      addTitle: "Eğitim / Mentorluk Ekle",
+      typeLabel: "Tür",
+      titleLabel: "Başlık",
+      descriptionLabel: "Açıklama",
+      priceLabel: "Ücret",
+      pricePlaceholder: "örn. 500 ₺ / saat, ücretsiz",
+      add: "Ekle",
+      remove: "Sil",
+      requestCta: "Talep Gönder",
+      requestFormTitle: "Katılım Talebi Gönder",
+      messageLabel: "Mesajın",
+      messagePlaceholder: "Kendinden ve neden ilgilendiğinden bahset",
+      send: "Gönder",
+      cancel: "Vazgeç",
+      sentSuccess: "Talebin gönderildi.",
+      sendError: "Talep gönderilemedi, tekrar dene.",
+      receivedRequestsTitle: "Eğitim Talepleri",
+      myRequestsTitle: "Gönderdiğim Eğitim Talepleri",
+      noReceivedRequests: "Henüz bir talep almadın.",
+      noSentRequests: "Henüz bir talep göndermedin.",
+      accept: "Kabul Et",
+      decline: "Reddet",
+      statusLabels: { PENDING: "Bekliyor", ACCEPTED: "Kabul Edildi", DECLINED: "Reddedildi" },
+      from: "Gönderen",
+    },
   },
   en: {
     nav: {
@@ -661,6 +721,35 @@ export const translations: Record<Locale, Translations> = {
       statusLabels: { PENDING: "Pending", ACCEPTED: "Accepted", DECLINED: "Declined" },
       from: "From",
       to: "To",
+    },
+    courses: {
+      sectionTitle: "Education & Mentorship",
+      empty: "No courses or mentorship offers yet.",
+      typeLabels: { COURSE: "Course", MENTORSHIP: "Mentorship" },
+      addTitle: "Add Course / Mentorship",
+      typeLabel: "Type",
+      titleLabel: "Title",
+      descriptionLabel: "Description",
+      priceLabel: "Price",
+      pricePlaceholder: "e.g. $50/hour, free",
+      add: "Add",
+      remove: "Remove",
+      requestCta: "Send Request",
+      requestFormTitle: "Send Enrollment Request",
+      messageLabel: "Your Message",
+      messagePlaceholder: "Tell them about yourself and why you're interested",
+      send: "Send",
+      cancel: "Cancel",
+      sentSuccess: "Your request has been sent.",
+      sendError: "Couldn't send the request, please try again.",
+      receivedRequestsTitle: "Course Requests",
+      myRequestsTitle: "My Sent Requests",
+      noReceivedRequests: "You haven't received any requests yet.",
+      noSentRequests: "You haven't sent any requests yet.",
+      accept: "Accept",
+      decline: "Decline",
+      statusLabels: { PENDING: "Pending", ACCEPTED: "Accepted", DECLINED: "Declined" },
+      from: "From",
     },
   },
 };

@@ -14,7 +14,10 @@ export default async function ProfileEditPage() {
 
   const profile = await prisma.profile.findUnique({
     where: { userId: session.userId },
-    include: { portfolioItems: { orderBy: { createdAt: "desc" } } },
+    include: {
+      portfolioItems: { orderBy: { createdAt: "desc" } },
+      courses: { orderBy: { createdAt: "desc" } },
+    },
   });
 
   if (!profile) {
@@ -35,6 +38,7 @@ export default async function ProfileEditPage() {
           avatarUrl: profile.avatarUrl,
         }}
         portfolioItems={profile.portfolioItems}
+        courses={profile.courses}
       />
     </div>
   );

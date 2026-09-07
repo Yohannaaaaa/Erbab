@@ -6,6 +6,7 @@ import { getSession } from "@/lib/auth";
 import { VitrinActions } from "@/components/VitrinActions";
 import { LikeButton } from "@/components/LikeButton";
 import { Avatar } from "@/components/Avatar";
+import { CourseRequestButton } from "@/components/CourseRequestButton";
 
 export default async function VitrinPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -16,6 +17,7 @@ export default async function VitrinPage({ params }: { params: Promise<{ slug: s
       include: {
         user: true,
         portfolioItems: { orderBy: { createdAt: "desc" } },
+        courses: { orderBy: { createdAt: "desc" } },
       },
     }),
     getServerLocale(),
@@ -56,6 +58,7 @@ export default async function VitrinPage({ params }: { params: Promise<{ slug: s
   ]);
 
   const t = translations[locale].vitrin;
+  const tCourses = translations[locale].courses;
   const itemTypeLabels = translations[locale].panel.itemTypes;
   const skills = profile.skills
     ? profile.skills.split(",").map((s) => s.trim()).filter(Boolean)
@@ -147,6 +150,30 @@ export default async function VitrinPage({ params }: { params: Promise<{ slug: s
                     {item.url} ↗
                   </a>
                 )}
+              </li>
+            ))}
+          </ul>
+        )}
+
+        <h2 className="mt-12 text-xl font-bold text-white">{tCourses.sectionTitle}</h2>
+
+        {profile.courses.length === 0 ? (
+          <p className="mt-4 text-sm text-white/50">{tCourses.empty}</p>
+        ) : (
+          <ul className="mt-4 grid gap-4 sm:grid-cols-2">
+            {profile.courses.map((course) => (
+              <li key={course.id} className="rounded-xl border border-white/10 bg-white/[0.03] p-5">
+                <span className="text-xs font-semibold uppercase tracking-wide text-gold-light">
+                  {tCourses.typeLabels[course.type]}
+                  {course.price ? ` · ${course.price}` : ""}
+                </span>
+                <p className="mt-1 font-semibold text-white">{course.title}</p>
+                <p className="mt-1 text-sm text-white/60">{course.description}</p>
+                <CourseRequestButton
+                  courseId={course.id}
+                  isLoggedIn={Boolean(session)}
+                  isOwnProfile={session?.userId === profile.userId}
+                />
               </li>
             ))}
           </ul>

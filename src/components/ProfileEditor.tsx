@@ -12,6 +12,14 @@ type PortfolioItem = {
   url: string | null;
 };
 
+type Course = {
+  id: string;
+  type: "COURSE" | "MENTORSHIP";
+  title: string;
+  description: string;
+  price: string | null;
+};
+
 type ProfileData = {
   title: string | null;
   bio: string | null;
@@ -26,10 +34,12 @@ export function ProfileEditor({
   slug,
   profile,
   portfolioItems,
+  courses,
 }: {
   slug: string;
   profile: ProfileData;
   portfolioItems: PortfolioItem[];
+  courses: Course[];
 }) {
   const { t } = useLanguage();
   const router = useRouter();
@@ -107,6 +117,45 @@ export function ProfileEditor({
   const handleRemoveItem = async (id: string) => {
     setItems((prev) => prev.filter((item) => item.id !== id));
     await fetch(`/api/profile/portfolio/${id}`, { method: "DELETE" });
+  };
+
+  const [courseList, setCourseList] = useState(courses);
+  const [courseType, setCourseType] = useState<Course["type"]>("COURSE");
+  const [courseTitle, setCourseTitle] = useState("");
+  const [courseDescription, setCourseDescription] = useState("");
+  const [coursePrice, setCoursePrice] = useState("");
+  const [courseError, setCourseError] = useState<string | null>(null);
+
+  const handleAddCourse = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setCourseError(null);
+
+    const res = await fetch("/api/courses", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        type: courseType,
+        title: courseTitle,
+        description: courseDescription,
+        price: coursePrice,
+      }),
+    });
+    const data = await res.json();
+
+    if (!res.ok) {
+      setCourseError(data.error ?? t.auth.genericError);
+      return;
+    }
+
+    setCourseList((prev) => [data.course, ...prev]);
+    setCourseTitle("");
+    setCourseDescription("");
+    setCoursePrice("");
+  };
+
+  const handleRemoveCourse = async (id: string) => {
+    setCourseList((prev) => prev.filter((course) => course.id !== id));
+    await fetch(`/api/courses/${id}`, { method: "DELETE" });
   };
 
   return (
@@ -299,6 +348,96 @@ export function ProfileEditor({
                 className="shrink-0 text-sm text-white/40 hover:text-red-400"
               >
                 {t.panel.remove}
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      <h2 className="mt-10 text-xl font-bold text-white">{t.courses.sectionTitle}</h2>
+
+      <form onSubmit={handleAddCourse} className="mt-4 flex flex-col gap-3 rounded-2xl border border-white/10 bg-white/[0.03] p-6">
+        <div className="grid gap-3 sm:grid-cols-2">
+          <label className="flex flex-col gap-1.5 text-sm text-white/80">
+            {t.courses.typeLabel}
+            <select
+              value={courseType}
+              onChange={(e) => setCourseType(e.target.value as Course["type"])}
+              className="rounded-lg border border-white/15 bg-black/40 px-4 py-2.5 text-white outline-none focus:border-gold"
+            >
+              {Object.entries(t.courses.typeLabels).map(([value, label]) => (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label className="flex flex-col gap-1.5 text-sm text-white/80">
+            {t.courses.titleLabel}
+            <input
+              required
+              value={courseTitle}
+              onChange={(e) => setCourseTitle(e.target.value)}
+              className="rounded-lg border border-white/15 bg-black/40 px-4 py-2.5 text-white outline-none focus:border-gold"
+            />
+          </label>
+        </div>
+
+        <label className="flex flex-col gap-1.5 text-sm text-white/80">
+          {t.courses.descriptionLabel}
+          <textarea
+            required
+            minLength={10}
+            rows={3}
+            value={courseDescription}
+            onChange={(e) => setCourseDescription(e.target.value)}
+            className="rounded-lg border border-white/15 bg-black/40 px-4 py-2.5 text-white outline-none focus:border-gold"
+          />
+        </label>
+
+        <label className="flex flex-col gap-1.5 text-sm text-white/80 sm:w-64">
+          {t.courses.priceLabel}
+          <input
+            value={coursePrice}
+            onChange={(e) => setCoursePrice(e.target.value)}
+            placeholder={t.courses.pricePlaceholder}
+            className="rounded-lg border border-white/15 bg-black/40 px-4 py-2.5 text-white outline-none focus:border-gold"
+          />
+        </label>
+
+        {courseError && <p className="text-sm text-red-400">{courseError}</p>}
+
+        <button
+          type="submit"
+          className="self-start rounded-full border border-gold/40 px-5 py-2 text-sm font-semibold text-gold-light hover:bg-gold/10"
+        >
+          {t.courses.add}
+        </button>
+      </form>
+
+      {courseList.length === 0 ? (
+        <p className="mt-6 text-sm text-white/50">{t.courses.empty}</p>
+      ) : (
+        <ul className="mt-6 flex flex-col gap-3">
+          {courseList.map((course) => (
+            <li
+              key={course.id}
+              className="flex items-start justify-between gap-4 rounded-xl border border-white/10 bg-white/[0.03] p-4"
+            >
+              <div>
+                <span className="text-xs font-semibold uppercase tracking-wide text-gold-light">
+                  {t.courses.typeLabels[course.type]}
+                  {course.price ? ` · ${course.price}` : ""}
+                </span>
+                <p className="mt-1 font-semibold text-white">{course.title}</p>
+                <p className="mt-1 text-sm text-white/60">{course.description}</p>
+              </div>
+              <button
+                onClick={() => handleRemoveCourse(course.id)}
+                className="shrink-0 text-sm text-white/40 hover:text-red-400"
+              >
+                {t.courses.remove}
               </button>
             </li>
           ))}
