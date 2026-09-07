@@ -163,6 +163,27 @@ type VitrinCopy = {
   loginToFollow: string;
 };
 
+type OffersCopy = {
+  formTitle: string;
+  titleLabel: string;
+  budgetLabel: string;
+  budgetPlaceholder: string;
+  messageLabel: string;
+  send: string;
+  cancel: string;
+  sentSuccess: string;
+  sendError: string;
+  receivedTitle: string;
+  sentTitle: string;
+  empty: string;
+  sentEmpty: string;
+  accept: string;
+  decline: string;
+  statusLabels: Record<"PENDING" | "ACCEPTED" | "DECLINED", string>;
+  from: string;
+  to: string;
+};
+
 export type Translations = {
   nav: NavCopy;
   hero: HeroCopy;
@@ -180,6 +201,7 @@ export type Translations = {
   auth: AuthCopy;
   panel: PanelCopy;
   vitrin: VitrinCopy;
+  offers: OffersCopy;
   footer: FooterCopy;
 };
 
@@ -390,6 +412,26 @@ export const translations: Record<Locale, Translations> = {
       memberSince: "Katılım",
       loginToFollow: "Takip etmek için giriş yapmalısın.",
     },
+    offers: {
+      formTitle: "İş Teklifi Gönder",
+      titleLabel: "Proje Başlığı",
+      budgetLabel: "Bütçe",
+      budgetPlaceholder: "örn. 1.500 €, teklife açık",
+      messageLabel: "Mesajın",
+      send: "Teklifi Gönder",
+      cancel: "Vazgeç",
+      sentSuccess: "Teklifin gönderildi.",
+      sendError: "Teklif gönderilemedi, tekrar dene.",
+      receivedTitle: "Gelen Teklifler",
+      sentTitle: "Gönderdiğim Teklifler",
+      empty: "Henüz bir teklif almadın.",
+      sentEmpty: "Henüz bir teklif göndermedin.",
+      accept: "Kabul Et",
+      decline: "Reddet",
+      statusLabels: { PENDING: "Bekliyor", ACCEPTED: "Kabul Edildi", DECLINED: "Reddedildi" },
+      from: "Gönderen",
+      to: "Alıcı",
+    },
   },
   en: {
     nav: {
@@ -596,6 +638,26 @@ export const translations: Record<Locale, Translations> = {
       comingSoon: "This feature is coming soon.",
       memberSince: "Member since",
       loginToFollow: "You need to log in to follow.",
+    },
+    offers: {
+      formTitle: "Send Job Offer",
+      titleLabel: "Project Title",
+      budgetLabel: "Budget",
+      budgetPlaceholder: "e.g. €1,500, open to offers",
+      messageLabel: "Your Message",
+      send: "Send Offer",
+      cancel: "Cancel",
+      sentSuccess: "Your offer has been sent.",
+      sendError: "Couldn't send the offer, please try again.",
+      receivedTitle: "Received Offers",
+      sentTitle: "Sent Offers",
+      empty: "You haven't received any offers yet.",
+      sentEmpty: "You haven't sent any offers yet.",
+      accept: "Accept",
+      decline: "Decline",
+      statusLabels: { PENDING: "Pending", ACCEPTED: "Accepted", DECLINED: "Declined" },
+      from: "From",
+      to: "To",
     },
   },
 };

@@ -21,6 +21,12 @@ enum PortfolioItemType {
   TEXT
 }
 
+enum JobOfferStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+}
+
 model User {
   id           String   @id @default(cuid())
   email        String   @unique
@@ -30,9 +36,24 @@ model User {
   role         Role
   createdAt    DateTime @default(now())
 
-  profile   Profile?
-  following Follow[] @relation("Follower")
-  followers Follow[] @relation("Following")
+  profile       Profile?
+  following     Follow[]   @relation("Follower")
+  followers     Follow[]   @relation("Following")
+  sentOffers    JobOffer[] @relation("OfferSender")
+  receivedOffers JobOffer[] @relation("OfferRecipient")
+}
+
+model JobOffer {
+  id          String         @id @default(cuid())
+  senderId    String
+  sender      User           @relation("OfferSender", fields: [senderId], references: [id], onDelete: Cascade)
+  recipientId String
+  recipient   User           @relation("OfferRecipient", fields: [recipientId], references: [id], onDelete: Cascade)
+  title       String
+  budget      String?
+  message     String
+  status      JobOfferStatus @default(PENDING)
+  createdAt   DateTime       @default(now())
 }
 
 model Follow {
