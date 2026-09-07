@@ -221,6 +221,16 @@ type CoursesCopy = {
   from: string;
 };
 
+type CommentsCopy = {
+  showOne: string;
+  showOther: string;
+  empty: string;
+  placeholder: string;
+  send: string;
+  loginToComment: string;
+  delete: string;
+};
+
 export type Translations = {
   nav: NavCopy;
   hero: HeroCopy;
@@ -240,6 +250,7 @@ export type Translations = {
   vitrin: VitrinCopy;
   offers: OffersCopy;
   courses: CoursesCopy;
+  comments: CommentsCopy;
   footer: FooterCopy;
 };
 
@@ -506,6 +517,15 @@ export const translations: Record<Locale, Translations> = {
       statusLabels: { PENDING: "Bekliyor", ACCEPTED: "Kabul Edildi", DECLINED: "Reddedildi" },
       from: "Gönderen",
     },
+    comments: {
+      showOne: "yorum",
+      showOther: "yorum",
+      empty: "Henüz yorum yok.",
+      placeholder: "Bir yorum yaz...",
+      send: "Gönder",
+      loginToComment: "Yorum yapmak için giriş yapmalısın.",
+      delete: "Sil",
+    },
   },
   en: {
     nav: {
@@ -768,6 +788,15 @@ export const translations: Record<Locale, Translations> = {
       decline: "Decline",
       statusLabels: { PENDING: "Pending", ACCEPTED: "Accepted", DECLINED: "Declined" },
       from: "From",
+    },
+    comments: {
+      showOne: "comment",
+      showOther: "comments",
+      empty: "No comments yet.",
+      placeholder: "Write a comment...",
+      send: "Send",
+      loginToComment: "You need to log in to comment.",
+      delete: "Delete",
     },
   },
 };

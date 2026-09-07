@@ -132,7 +132,8 @@ model PortfolioItem {
   url         String?
   createdAt   DateTime          @default(now())
 
-  likes Like[]
+  likes    Like[]
+  comments Comment[]
 }
 
 model Like {
@@ -143,4 +144,14 @@ model Like {
   createdAt       DateTime      @default(now())
 
   @@unique([userId, portfolioItemId])
+}
+
+model Comment {
+  id              String        @id @default(cuid())
+  userId          String
+  authorName      String
+  portfolioItemId String
+  portfolioItem   PortfolioItem @relation(fields: [portfolioItemId], references: [id], onDelete: Cascade)
+  body            String
+  createdAt       DateTime      @default(now())
 }

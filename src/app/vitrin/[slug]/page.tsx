@@ -7,6 +7,7 @@ import { VitrinActions } from "@/components/VitrinActions";
 import { LikeButton } from "@/components/LikeButton";
 import { Avatar } from "@/components/Avatar";
 import { CourseRequestButton } from "@/components/CourseRequestButton";
+import { CommentsSection } from "@/components/CommentsSection";
 
 export default async function VitrinPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -29,7 +30,7 @@ export default async function VitrinPage({ params }: { params: Promise<{ slug: s
   }
 
   const itemIds = profile.portfolioItems.map((item) => item.id);
-  const [likeCounts, likedItemIds] = await Promise.all([
+  const [likeCounts, likedItemIds, comments] = await Promise.all([
     prisma.like.groupBy({
       by: ["portfolioItemId"],
       where: { portfolioItemId: { in: itemIds } },
@@ -43,8 +44,18 @@ export default async function VitrinPage({ params }: { params: Promise<{ slug: s
           })
           .then((rows) => new Set(rows.map((row) => row.portfolioItemId)))
       : Promise.resolve(new Set<string>()),
+    prisma.comment.findMany({
+      where: { portfolioItemId: { in: itemIds } },
+      orderBy: { createdAt: "asc" },
+    }),
   ]);
   const likeCountMap = new Map(likeCounts.map((row) => [row.portfolioItemId, row._count.portfolioItemId]));
+  const commentsByItem = new Map<string, typeof comments>();
+  for (const comment of comments) {
+    const list = commentsByItem.get(comment.portfolioItemId) ?? [];
+    list.push(comment);
+    commentsByItem.set(comment.portfolioItemId, list);
+  }
 
   const [followerCount, isFollowing] = await Promise.all([
     prisma.follow.count({ where: { followingId: profile.userId } }),
@@ -150,6 +161,16 @@ export default async function VitrinPage({ params }: { params: Promise<{ slug: s
                     {item.url} ↗
                   </a>
                 )}
+                <CommentsSection
+                  portfolioItemId={item.id}
+                  isLoggedIn={Boolean(session)}
+                  initialComments={(commentsByItem.get(item.id) ?? []).map((comment) => ({
+                    id: comment.id,
+                    authorName: comment.authorName,
+                    body: comment.body,
+                    isOwn: session?.userId === comment.userId,
+                  }))}
+                />
               </li>
             ))}
           </ul>
