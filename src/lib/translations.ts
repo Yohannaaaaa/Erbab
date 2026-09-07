@@ -231,6 +231,24 @@ type CommentsCopy = {
   delete: string;
 };
 
+type NotificationsCopy = {
+  title: string;
+  empty: string;
+  markAllRead: string;
+  messages: Record<
+    | "FOLLOW"
+    | "LIKE"
+    | "COMMENT"
+    | "JOB_OFFER"
+    | "JOB_OFFER_ACCEPTED"
+    | "JOB_OFFER_DECLINED"
+    | "COURSE_REQUEST"
+    | "COURSE_REQUEST_ACCEPTED"
+    | "COURSE_REQUEST_DECLINED",
+    string
+  >;
+};
+
 export type Translations = {
   nav: NavCopy;
   hero: HeroCopy;
@@ -251,6 +269,7 @@ export type Translations = {
   offers: OffersCopy;
   courses: CoursesCopy;
   comments: CommentsCopy;
+  notifications: NotificationsCopy;
   footer: FooterCopy;
 };
 
@@ -526,6 +545,22 @@ export const translations: Record<Locale, Translations> = {
       loginToComment: "Yorum yapmak için giriş yapmalısın.",
       delete: "Sil",
     },
+    notifications: {
+      title: "Bildirimler",
+      empty: "Henüz bildirimin yok.",
+      markAllRead: "Tümünü okundu işaretle",
+      messages: {
+        FOLLOW: "{name} seni takip etmeye başladı.",
+        LIKE: "{name} bir çalışmanı beğendi.",
+        COMMENT: "{name} bir çalışmana yorum yaptı.",
+        JOB_OFFER: "{name} sana bir iş teklifi gönderdi.",
+        JOB_OFFER_ACCEPTED: "{name} iş teklifini kabul etti.",
+        JOB_OFFER_DECLINED: "{name} iş teklifini reddetti.",
+        COURSE_REQUEST: "{name} eğitimine talep gönderdi.",
+        COURSE_REQUEST_ACCEPTED: "{name} eğitim talebini kabul etti.",
+        COURSE_REQUEST_DECLINED: "{name} eğitim talebini reddetti.",
+      },
+    },
   },
   en: {
     nav: {
@@ -797,6 +832,22 @@ export const translations: Record<Locale, Translations> = {
       send: "Send",
       loginToComment: "You need to log in to comment.",
       delete: "Delete",
+    },
+    notifications: {
+      title: "Notifications",
+      empty: "No notifications yet.",
+      markAllRead: "Mark all as read",
+      messages: {
+        FOLLOW: "{name} started following you.",
+        LIKE: "{name} liked one of your works.",
+        COMMENT: "{name} commented on your work.",
+        JOB_OFFER: "{name} sent you a job offer.",
+        JOB_OFFER_ACCEPTED: "{name} accepted your job offer.",
+        JOB_OFFER_DECLINED: "{name} declined your job offer.",
+        COURSE_REQUEST: "{name} requested your course.",
+        COURSE_REQUEST_ACCEPTED: "{name} accepted your course request.",
+        COURSE_REQUEST_DECLINED: "{name} declined your course request.",
+      },
     },
   },
 };

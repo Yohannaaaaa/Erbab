@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { getSession } from "@/lib/auth";
+import { createNotification } from "@/lib/notifications";
 
 const bodySchema = z.object({
   portfolioItemId: z.string().min(1),
@@ -20,16 +21,30 @@ export async function POST(request: Request) {
 
   const { portfolioItemId } = parsed.data;
 
-  const item = await prisma.portfolioItem.findUnique({ where: { id: portfolioItemId } });
+  const item = await prisma.portfolioItem.findUnique({
+    where: { id: portfolioItemId },
+    include: { profile: true },
+  });
   if (!item) {
     return NextResponse.json({ error: "Bulunamadı" }, { status: 404 });
   }
 
-  await prisma.like.upsert({
+  const existing = await prisma.like.findUnique({
     where: { userId_portfolioItemId: { userId: session.userId, portfolioItemId } },
-    create: { userId: session.userId, portfolioItemId },
-    update: {},
   });
+
+  if (!existing) {
+    await prisma.like.create({ data: { userId: session.userId, portfolioItemId } });
+
+    if (item.profile.userId !== session.userId) {
+      await createNotification({
+        userId: item.profile.userId,
+        type: "LIKE",
+        actorName: session.name,
+        link: `/vitrin/${item.profile.slug}`,
+      });
+    }
+  }
 
   const likeCount = await prisma.like.count({ where: { portfolioItemId } });
 

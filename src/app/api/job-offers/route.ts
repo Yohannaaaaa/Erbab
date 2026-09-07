@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { getSession } from "@/lib/auth";
+import { createNotification } from "@/lib/notifications";
 
 const bodySchema = z.object({
   recipientId: z.string().min(1),
@@ -43,6 +44,13 @@ export async function POST(request: Request) {
       budget: budget || null,
       message,
     },
+  });
+
+  await createNotification({
+    userId: recipientId,
+    type: "JOB_OFFER",
+    actorName: session.name,
+    link: "/panel",
   });
 
   return NextResponse.json({ ok: true, offer });

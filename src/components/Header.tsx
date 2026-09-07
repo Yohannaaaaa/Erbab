@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useLanguage } from "@/lib/language-context";
 import { LogoutButton } from "@/components/LogoutButton";
+import { NotificationsBell } from "@/components/NotificationsBell";
 
 type AuthUser = { name: string; role: "ERBAB" | "GOZLEMCI" | "ISVEREN" } | null;
 
@@ -55,6 +56,7 @@ export function Header({ authUser }: { authUser: AuthUser }) {
 
           {authUser ? (
             <div className="hidden items-center gap-3 sm:flex">
+              <NotificationsBell />
               <Link
                 href="/panel"
                 className="rounded-full bg-gold px-4 py-2 text-sm font-semibold text-black hover:bg-gold-light"
@@ -108,9 +110,12 @@ export function Header({ authUser }: { authUser: AuthUser }) {
           </div>
           {authUser ? (
             <>
-              <Link href="/panel" onClick={() => setOpen(false)} className="font-semibold text-gold-light">
-                {t.nav.panel}
-              </Link>
+              <div className="flex items-center gap-2">
+                <NotificationsBell />
+                <Link href="/panel" onClick={() => setOpen(false)} className="font-semibold text-gold-light">
+                  {t.nav.panel}
+                </Link>
+              </div>
               <LogoutButton className="text-left text-white/50" />
             </>
           ) : (

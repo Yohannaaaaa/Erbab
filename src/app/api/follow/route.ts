@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { getSession } from "@/lib/auth";
+import { createNotification } from "@/lib/notifications";
 
 const bodySchema = z.object({
   userId: z.string().min(1),
@@ -28,11 +29,21 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Kullanıcı bulunamadı" }, { status: 404 });
   }
 
-  await prisma.follow.upsert({
+  const existing = await prisma.follow.findUnique({
     where: { followerId_followingId: { followerId: session.userId, followingId: userId } },
-    create: { followerId: session.userId, followingId: userId },
-    update: {},
   });
+
+  if (!existing) {
+    await prisma.follow.create({ data: { followerId: session.userId, followingId: userId } });
+
+    const followerProfile = await prisma.profile.findUnique({ where: { userId: session.userId } });
+    await createNotification({
+      userId,
+      type: "FOLLOW",
+      actorName: session.name,
+      link: followerProfile ? `/vitrin/${followerProfile.slug}` : undefined,
+    });
+  }
 
   const followerCount = await prisma.follow.count({ where: { followingId: userId } });
 

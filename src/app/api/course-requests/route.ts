@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { getSession } from "@/lib/auth";
+import { createNotification } from "@/lib/notifications";
 
 const bodySchema = z.object({
   courseId: z.string().min(1),
@@ -34,6 +35,13 @@ export async function POST(request: Request) {
 
   const request_ = await prisma.courseRequest.create({
     data: { courseId, studentId: session.userId, message },
+  });
+
+  await createNotification({
+    userId: course.profile.userId,
+    type: "COURSE_REQUEST",
+    actorName: session.name,
+    link: "/panel",
   });
 
   return NextResponse.json({ ok: true, request: request_ });
