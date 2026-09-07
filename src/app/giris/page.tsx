@@ -79,7 +79,12 @@ function LoginForm() {
         </label>
 
         <label className="flex flex-col gap-1.5 text-sm text-white/80">
-          {t.auth.passwordLabel}
+          <span className="flex items-center justify-between">
+            {t.auth.passwordLabel}
+            <Link href="/sifremi-unuttum" className="text-xs font-medium text-gold-light hover:text-gold">
+              {t.auth.forgotPasswordLink}
+            </Link>
+          </span>
           <PasswordInput value={password} onChange={setPassword} required autoComplete="current-password" />
         </label>
 

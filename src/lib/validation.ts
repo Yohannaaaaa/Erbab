@@ -12,6 +12,15 @@ export const loginSchema = z.object({
   password: z.string().min(1, "Şifre gerekli"),
 });
 
+export const forgotPasswordSchema = z.object({
+  email: z.string().trim().toLowerCase().email("Geçerli bir e-posta girin"),
+});
+
+export const resetPasswordSchema = z.object({
+  token: z.string().min(1),
+  password: z.string().min(8, "Şifre en az 8 karakter olmalı").max(72),
+});
+
 export const profileSchema = z.object({
   title: z.string().trim().max(120).optional().or(z.literal("")),
   bio: z.string().trim().max(2000).optional().or(z.literal("")),

@@ -67,6 +67,16 @@ model User {
   receivedOffers JobOffer[] @relation("OfferRecipient")
   courseRequests CourseRequest[] @relation("CourseStudent")
   notifications  Notification[]
+  passwordResetTokens PasswordResetToken[]
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
 }
 
 model JobOffer {

@@ -118,6 +118,18 @@ type AuthCopy = {
   oauthError: string;
   showPassword: string;
   hidePassword: string;
+  forgotPasswordLink: string;
+  forgotPasswordTitle: string;
+  forgotPasswordSubtitle: string;
+  forgotPasswordSubmit: string;
+  forgotPasswordSuccess: string;
+  backToLogin: string;
+  resetPasswordTitle: string;
+  resetPasswordSubtitle: string;
+  newPasswordLabel: string;
+  resetPasswordSubmit: string;
+  resetPasswordSuccess: string;
+  resetPasswordInvalid: string;
 };
 
 type PanelCopy = {
@@ -465,6 +477,18 @@ export const translations: Record<Locale, Translations> = {
       oauthError: "Google ile giriş başarısız oldu, tekrar dene.",
       showPassword: "Şifreyi göster",
       hidePassword: "Şifreyi gizle",
+      forgotPasswordLink: "Şifremi unuttum",
+      forgotPasswordTitle: "Şifremi Unuttum",
+      forgotPasswordSubtitle: "E-posta adresini gir, sana bir sıfırlama linki gönderelim.",
+      forgotPasswordSubmit: "Sıfırlama Linki Gönder",
+      forgotPasswordSuccess: "Eğer bu e-posta kayıtlıysa, sıfırlama linki gönderildi. Gelen kutunu kontrol et.",
+      backToLogin: "Girişe dön",
+      resetPasswordTitle: "Yeni Şifre Belirle",
+      resetPasswordSubtitle: "Hesabın için yeni bir şifre belirle.",
+      newPasswordLabel: "Yeni Şifre",
+      resetPasswordSubmit: "Şifreyi Güncelle",
+      resetPasswordSuccess: "Şifren güncellendi. Şimdi giriş yapabilirsin.",
+      resetPasswordInvalid: "Bu link geçersiz veya süresi dolmuş. Yeni bir sıfırlama linki iste.",
     },
     panel: {
       welcome: "Hoş geldin",
@@ -778,6 +802,18 @@ export const translations: Record<Locale, Translations> = {
       oauthError: "Google sign-in failed, please try again.",
       showPassword: "Show password",
       hidePassword: "Hide password",
+      forgotPasswordLink: "Forgot password?",
+      forgotPasswordTitle: "Forgot Password",
+      forgotPasswordSubtitle: "Enter your email and we'll send you a reset link.",
+      forgotPasswordSubmit: "Send Reset Link",
+      forgotPasswordSuccess: "If that email is registered, a reset link has been sent. Check your inbox.",
+      backToLogin: "Back to login",
+      resetPasswordTitle: "Set New Password",
+      resetPasswordSubtitle: "Choose a new password for your account.",
+      newPasswordLabel: "New Password",
+      resetPasswordSubmit: "Update Password",
+      resetPasswordSuccess: "Your password has been updated. You can now log in.",
+      resetPasswordInvalid: "This link is invalid or has expired. Request a new one.",
     },
     panel: {
       welcome: "Welcome",
