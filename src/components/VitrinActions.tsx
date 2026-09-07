@@ -3,6 +3,7 @@
 import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { useLanguage } from "@/lib/language-context";
+import { SimpleProposalButton } from "@/components/SimpleProposalButton";
 
 export function VitrinActions({
   targetUserId,
@@ -20,7 +21,6 @@ export function VitrinActions({
 
   const [following, setFollowing] = useState(initialFollowing);
   const [followLoading, setFollowLoading] = useState(false);
-  const [message, setMessage] = useState<string | null>(null);
 
   const [showOfferForm, setShowOfferForm] = useState(false);
   const [offerTitle, setOfferTitle] = useState("");
@@ -32,11 +32,6 @@ export function VitrinActions({
 
   const requireLogin = () => {
     router.push(`/giris?next=${encodeURIComponent(window.location.pathname)}`);
-  };
-
-  const showComingSoon = () => {
-    setMessage(t.vitrin.comingSoon);
-    window.setTimeout(() => setMessage(null), 2500);
   };
 
   const sendMessage = () => {
@@ -140,14 +135,24 @@ export function VitrinActions({
           </button>
         )}
 
-        <button
-          onClick={showComingSoon}
-          className="rounded-full border border-white/20 px-5 py-2.5 text-sm font-semibold text-white hover:bg-white/10"
-        >
-          {t.vitrin.proposeCollab}
-        </button>
+        {!isOwnProfile && (
+          <SimpleProposalButton
+            targetUserId={targetUserId}
+            isLoggedIn={isLoggedIn}
+            apiEndpoint="/api/collaborations"
+            copy={t.collaborations}
+          />
+        )}
+
+        {!isOwnProfile && (
+          <SimpleProposalButton
+            targetUserId={targetUserId}
+            isLoggedIn={isLoggedIn}
+            apiEndpoint="/api/apprenticeships"
+            copy={t.apprenticeships}
+          />
+        )}
       </div>
-      {message && <p className="text-xs text-white/50">{message}</p>}
 
       {showOfferForm && (
         <div className="mt-2 max-w-md rounded-xl border border-white/10 bg-white/[0.03] p-5">

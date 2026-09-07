@@ -38,6 +38,18 @@ enum CourseRequestStatus {
   DECLINED
 }
 
+enum CollaborationStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+}
+
+enum ApprenticeshipStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+}
+
 enum NotificationType {
   FOLLOW
   LIKE
@@ -50,6 +62,12 @@ enum NotificationType {
   COURSE_REQUEST_DECLINED
   REVIEW
   MESSAGE
+  COLLABORATION_PROPOSAL
+  COLLABORATION_ACCEPTED
+  COLLABORATION_DECLINED
+  APPRENTICESHIP_REQUEST
+  APPRENTICESHIP_ACCEPTED
+  APPRENTICESHIP_DECLINED
 }
 
 model User {
@@ -73,6 +91,10 @@ model User {
   reviewsReceived Review[] @relation("ReviewTarget")
   sentMessages     Message[] @relation("MessageSender")
   receivedMessages Message[] @relation("MessageRecipient")
+  sentCollabProposals     CollaborationProposal[] @relation("CollabSender")
+  receivedCollabProposals CollaborationProposal[] @relation("CollabRecipient")
+  sentApprenticeships     ApprenticeshipRequest[] @relation("ApprenticeSender")
+  receivedApprenticeships ApprenticeshipRequest[] @relation("ApprenticeRecipient")
 }
 
 model PasswordResetToken {
@@ -211,6 +233,28 @@ model Message {
 
   @@index([senderId, recipientId])
   @@index([recipientId, senderId])
+}
+
+model CollaborationProposal {
+  id          String              @id @default(cuid())
+  senderId    String
+  sender      User                @relation("CollabSender", fields: [senderId], references: [id], onDelete: Cascade)
+  recipientId String
+  recipient   User                @relation("CollabRecipient", fields: [recipientId], references: [id], onDelete: Cascade)
+  message     String
+  status      CollaborationStatus @default(PENDING)
+  createdAt   DateTime            @default(now())
+}
+
+model ApprenticeshipRequest {
+  id          String               @id @default(cuid())
+  senderId    String
+  sender      User                 @relation("ApprenticeSender", fields: [senderId], references: [id], onDelete: Cascade)
+  recipientId String
+  recipient   User                 @relation("ApprenticeRecipient", fields: [recipientId], references: [id], onDelete: Cascade)
+  message     String
+  status      ApprenticeshipStatus @default(PENDING)
+  createdAt   DateTime             @default(now())
 }
 
 model Notification {

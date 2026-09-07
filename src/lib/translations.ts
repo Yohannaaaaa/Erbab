@@ -179,8 +179,6 @@ type VitrinCopy = {
   follow: string;
   following: string;
   followers: string;
-  proposeCollab: string;
-  comingSoon: string;
   memberSince: string;
   loginToFollow: string;
 };
@@ -284,6 +282,26 @@ type ReviewsCopy = {
   sendError: string;
 };
 
+type SimpleProposalCopy = {
+  buttonLabel: string;
+  formTitle: string;
+  messageLabel: string;
+  messagePlaceholder: string;
+  send: string;
+  cancel: string;
+  sentSuccess: string;
+  sendError: string;
+  receivedTitle: string;
+  sentTitle: string;
+  empty: string;
+  sentEmpty: string;
+  accept: string;
+  decline: string;
+  statusLabels: Record<"PENDING" | "ACCEPTED" | "DECLINED", string>;
+  from: string;
+  to: string;
+};
+
 type DirectMessagesCopy = {
   sendMessage: string;
   inboxTitle: string;
@@ -308,7 +326,13 @@ type NotificationsCopy = {
     | "COURSE_REQUEST_ACCEPTED"
     | "COURSE_REQUEST_DECLINED"
     | "REVIEW"
-    | "MESSAGE",
+    | "MESSAGE"
+    | "COLLABORATION_PROPOSAL"
+    | "COLLABORATION_ACCEPTED"
+    | "COLLABORATION_DECLINED"
+    | "APPRENTICESHIP_REQUEST"
+    | "APPRENTICESHIP_ACCEPTED"
+    | "APPRENTICESHIP_DECLINED",
     string
   >;
 };
@@ -335,6 +359,8 @@ export type Translations = {
   comments: CommentsCopy;
   notifications: NotificationsCopy;
   dm: DirectMessagesCopy;
+  collaborations: SimpleProposalCopy;
+  apprenticeships: SimpleProposalCopy;
   reviews: ReviewsCopy;
   admin: AdminCopy;
   footer: FooterCopy;
@@ -564,8 +590,6 @@ export const translations: Record<Locale, Translations> = {
       follow: "Takip Et",
       following: "Takip Ediliyor",
       followers: "takipçi",
-      proposeCollab: "İş Birliği Öner",
-      comingSoon: "Bu özellik yakında aktif olacak.",
       memberSince: "Katılım",
       loginToFollow: "Takip etmek için giriş yapmalısın.",
     },
@@ -643,6 +667,12 @@ export const translations: Record<Locale, Translations> = {
         COURSE_REQUEST_DECLINED: "{name} eğitim talebini reddetti.",
         REVIEW: "{name} seni değerlendirdi.",
         MESSAGE: "{name} sana mesaj gönderdi.",
+        COLLABORATION_PROPOSAL: "{name} sana iş birliği önerdi.",
+        COLLABORATION_ACCEPTED: "{name} iş birliği önerini kabul etti.",
+        COLLABORATION_DECLINED: "{name} iş birliği önerini reddetti.",
+        APPRENTICESHIP_REQUEST: "{name} sana çıraklık teklif etti.",
+        APPRENTICESHIP_ACCEPTED: "{name} çıraklık teklifini kabul etti.",
+        APPRENTICESHIP_DECLINED: "{name} çıraklık teklifini reddetti.",
       },
     },
     dm: {
@@ -652,6 +682,44 @@ export const translations: Record<Locale, Translations> = {
       placeholder: "Bir mesaj yaz...",
       send: "Gönder",
       backToInbox: "Mesajlara dön",
+    },
+    collaborations: {
+      buttonLabel: "İş Birliği Öner",
+      formTitle: "İş Birliği Öner",
+      messageLabel: "Mesajın",
+      messagePlaceholder: "Ne tür bir iş birliği önermek istiyorsun?",
+      send: "Gönder",
+      cancel: "Vazgeç",
+      sentSuccess: "İş birliği önerin gönderildi.",
+      sendError: "Gönderilemedi, tekrar dene.",
+      receivedTitle: "İş Birliği Önerileri",
+      sentTitle: "Gönderdiğim İş Birliği Önerileri",
+      empty: "Henüz bir öneri almadın.",
+      sentEmpty: "Henüz bir öneri göndermedin.",
+      accept: "Kabul Et",
+      decline: "Reddet",
+      statusLabels: { PENDING: "Bekliyor", ACCEPTED: "Kabul Edildi", DECLINED: "Reddedildi" },
+      from: "Gönderen",
+      to: "Alıcı",
+    },
+    apprenticeships: {
+      buttonLabel: "Çıraklık Teklif Et",
+      formTitle: "Çıraklık Teklif Et",
+      messageLabel: "Mesajın",
+      messagePlaceholder: "Kendinden ve neden çırağı olmak istediğinden bahset",
+      send: "Gönder",
+      cancel: "Vazgeç",
+      sentSuccess: "Çıraklık teklifin gönderildi.",
+      sendError: "Gönderilemedi, tekrar dene.",
+      receivedTitle: "Çıraklık Teklifleri",
+      sentTitle: "Gönderdiğim Çıraklık Teklifleri",
+      empty: "Henüz bir teklif almadın.",
+      sentEmpty: "Henüz bir teklif göndermedin.",
+      accept: "Kabul Et",
+      decline: "Reddet",
+      statusLabels: { PENDING: "Bekliyor", ACCEPTED: "Kabul Edildi", DECLINED: "Reddedildi" },
+      from: "Gönderen",
+      to: "Alıcı",
     },
     reviews: {
       sectionTitle: "Değerlendirmeler",
@@ -913,8 +981,6 @@ export const translations: Record<Locale, Translations> = {
       follow: "Follow",
       following: "Following",
       followers: "followers",
-      proposeCollab: "Propose Collaboration",
-      comingSoon: "This feature is coming soon.",
       memberSince: "Member since",
       loginToFollow: "You need to log in to follow.",
     },
@@ -992,6 +1058,12 @@ export const translations: Record<Locale, Translations> = {
         COURSE_REQUEST_DECLINED: "{name} declined your course request.",
         REVIEW: "{name} left you a review.",
         MESSAGE: "{name} sent you a message.",
+        COLLABORATION_PROPOSAL: "{name} proposed a collaboration.",
+        COLLABORATION_ACCEPTED: "{name} accepted your collaboration proposal.",
+        COLLABORATION_DECLINED: "{name} declined your collaboration proposal.",
+        APPRENTICESHIP_REQUEST: "{name} offered to be your apprentice.",
+        APPRENTICESHIP_ACCEPTED: "{name} accepted your apprenticeship offer.",
+        APPRENTICESHIP_DECLINED: "{name} declined your apprenticeship offer.",
       },
     },
     dm: {
@@ -1001,6 +1073,44 @@ export const translations: Record<Locale, Translations> = {
       placeholder: "Write a message...",
       send: "Send",
       backToInbox: "Back to inbox",
+    },
+    collaborations: {
+      buttonLabel: "Propose Collaboration",
+      formTitle: "Propose Collaboration",
+      messageLabel: "Your message",
+      messagePlaceholder: "What kind of collaboration are you proposing?",
+      send: "Send",
+      cancel: "Cancel",
+      sentSuccess: "Your collaboration proposal has been sent.",
+      sendError: "Couldn't send it, try again.",
+      receivedTitle: "Collaboration Proposals",
+      sentTitle: "Proposals I Sent",
+      empty: "You haven't received a proposal yet.",
+      sentEmpty: "You haven't sent a proposal yet.",
+      accept: "Accept",
+      decline: "Decline",
+      statusLabels: { PENDING: "Pending", ACCEPTED: "Accepted", DECLINED: "Declined" },
+      from: "From",
+      to: "To",
+    },
+    apprenticeships: {
+      buttonLabel: "Offer Apprenticeship",
+      formTitle: "Offer Apprenticeship",
+      messageLabel: "Your message",
+      messagePlaceholder: "Tell them about yourself and why you'd like to be their apprentice",
+      send: "Send",
+      cancel: "Cancel",
+      sentSuccess: "Your apprenticeship offer has been sent.",
+      sendError: "Couldn't send it, try again.",
+      receivedTitle: "Apprenticeship Offers",
+      sentTitle: "Offers I Sent",
+      empty: "You haven't received an offer yet.",
+      sentEmpty: "You haven't sent an offer yet.",
+      accept: "Accept",
+      decline: "Decline",
+      statusLabels: { PENDING: "Pending", ACCEPTED: "Accepted", DECLINED: "Declined" },
+      from: "From",
+      to: "To",
     },
     reviews: {
       sectionTitle: "Reviews",
