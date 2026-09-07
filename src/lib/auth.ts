@@ -62,3 +62,26 @@ export async function clearSession() {
   const cookieStore = await cookies();
   cookieStore.delete(SESSION_COOKIE);
 }
+
+export type OAuthRole = "ERBAB" | "GOZLEMCI" | "ISVEREN";
+
+export async function createOAuthState(role: OAuthRole) {
+  return new SignJWT({ role, csrf: crypto.randomUUID() })
+    .setProtectedHeader({ alg: "HS256" })
+    .setIssuedAt()
+    .setExpirationTime("10m")
+    .sign(getSecretKey());
+}
+
+export async function verifyOAuthState(state: string): Promise<OAuthRole | null> {
+  try {
+    const { payload } = await jwtVerify(state, getSecretKey());
+    const role = payload.role;
+    if (role === "ERBAB" || role === "GOZLEMCI" || role === "ISVEREN") {
+      return role;
+    }
+    return null;
+  } catch {
+    return null;
+  }
+}

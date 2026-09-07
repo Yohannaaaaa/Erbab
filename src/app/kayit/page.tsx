@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useLanguage } from "@/lib/language-context";
 import { AuthShell } from "@/components/AuthShell";
+import { GoogleButton } from "@/components/GoogleButton";
 
 export default function RegisterPage() {
   const { t } = useLanguage();
@@ -63,6 +64,13 @@ export default function RegisterPage() {
               <span className="mt-1 block text-white/50">{r.description}</span>
             </button>
           ))}
+        </div>
+
+        <GoogleButton role={role} />
+        <div className="flex items-center gap-3 text-xs uppercase tracking-widest text-white/40">
+          <span className="h-px flex-1 bg-white/10" />
+          {t.auth.orDivider}
+          <span className="h-px flex-1 bg-white/10" />
         </div>
 
         <label className="flex flex-col gap-1.5 text-sm text-white/80">

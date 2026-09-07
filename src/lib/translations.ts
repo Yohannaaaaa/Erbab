@@ -112,6 +112,9 @@ type AuthCopy = {
   loginLink: string;
   registerLink: string;
   genericError: string;
+  googleCta: string;
+  orDivider: string;
+  oauthError: string;
 };
 
 type PanelCopy = {
@@ -336,6 +339,9 @@ export const translations: Record<Locale, Translations> = {
       loginLink: "Giriş yap",
       registerLink: "Kayıt ol",
       genericError: "Bir şeyler ters gitti, tekrar dene.",
+      googleCta: "Google ile Devam Et",
+      orDivider: "veya",
+      oauthError: "Google ile giriş başarısız oldu, tekrar dene.",
     },
     panel: {
       welcome: "Hoş geldin",
@@ -537,6 +543,9 @@ export const translations: Record<Locale, Translations> = {
       loginLink: "Log in",
       registerLink: "Sign up",
       genericError: "Something went wrong, please try again.",
+      googleCta: "Continue with Google",
+      orDivider: "or",
+      oauthError: "Google sign-in failed, please try again.",
     },
     panel: {
       welcome: "Welcome",

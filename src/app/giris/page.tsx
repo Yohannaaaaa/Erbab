@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useLanguage } from "@/lib/language-context";
 import { AuthShell } from "@/components/AuthShell";
+import { GoogleButton } from "@/components/GoogleButton";
 
 export default function LoginPage() {
   return (
@@ -21,7 +22,9 @@ function LoginForm() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(
+    searchParams.get("error") === "oauth" ? t.auth.oauthError : null,
+  );
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -53,7 +56,16 @@ function LoginForm() {
 
   return (
     <AuthShell title={t.auth.loginTitle} subtitle={t.auth.loginSubtitle}>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4">
+        <GoogleButton />
+        <div className="flex items-center gap-3 text-xs uppercase tracking-widest text-white/40">
+          <span className="h-px flex-1 bg-white/10" />
+          {t.auth.orDivider}
+          <span className="h-px flex-1 bg-white/10" />
+        </div>
+      </div>
+
+      <form onSubmit={handleSubmit} className="mt-4 flex flex-col gap-4">
         <label className="flex flex-col gap-1.5 text-sm text-white/80">
           {t.auth.emailLabel}
           <input

@@ -17,7 +17,7 @@ export async function POST(request: Request) {
   const { email, password } = parsed.data;
 
   const user = await prisma.user.findUnique({ where: { email }, include: { profile: true } });
-  if (!user || !(await verifyPassword(password, user.passwordHash))) {
+  if (!user || !user.passwordHash || !(await verifyPassword(password, user.passwordHash))) {
     return NextResponse.json({ error: "E-posta veya şifre hatalı" }, { status: 401 });
   }
 
